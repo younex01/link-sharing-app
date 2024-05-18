@@ -46,17 +46,22 @@ const CustomizeProfile = () => {
           <div className="bg-[#FAFAFA] rounded-xl w-full max-w-full p-12 flex flex-col items-center gap-5 mt-5">
 
             <div className="flex justify-stretch items-center w-full">
-              <label className="block mb-2 w-full text-sm font-medium text-[#737373]">First name*</label>
-              <Input type="text" placeholder="e.g. John" register={register('first_name')} errorMessage={errors.first_name && <span className="text-red-200">{errors.first_name.message}</span>}/>
-
+              <label className="block mb-2 w-fit text-sm font-medium text-[#737373]">First name*</label>
+              <div className="ml-auto w-[300px]">
+              <Input type="text" placeholder="e.g. John" register={register('first_name')} error={errors.first_name} errorMessage={errors.first_name?.message}/>
+              </div>
             </div>
             <div className="flex justify-stretch items-center w-full">
-              <label className="block mb-2 w-full text-sm font-medium text-[#737373]">Last name*</label>
-              <Input type="text" placeholder="e.g. Appleseed" register={register('last_name')} errorMessage={errors.last_name && <span className="text-red-200">{errors.last_name.message}</span>}/>
+              <label className="block mb-2 w-fit text-sm font-medium text-[#737373]">Last name*</label>
+              <div className="ml-auto w-[300px]">
+              <Input type="text" placeholder="e.g. Appleseed" register={register('last_name')} error={errors.last_name} errorMessage={errors.last_name?.message}/>
+              </div>
             </div>
             <div className="flex justify-stretch items-center w-full">
-              <label className="block mb-2 w-full text-sm font-medium text-[#737373]">Email</label>
-              <Input type="email" placeholder="e.g. email@example.com" register={register('email')} />
+              <label className="block mb-2 w-fit text-sm font-medium text-[#737373]">Email</label>
+              <div className="ml-auto w-[300px]">
+                <Input type="email" placeholder="e.g. email@example.com" register={register('email')} />
+              </div>
             </div>
           </div>
         </div>
