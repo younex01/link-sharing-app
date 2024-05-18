@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+    font-family: "Regular";
+    src: local("InstrumentSans-Regular"),
+    url('./assets/Instrument_Sans/static/InstrumentSans-Regular') format("truetype");
+}
+@font-face {
+    font-family: "Medium";
+    src: local("InstrumentSans-Medium"),
+    url('./assets/Instrument_Sans/static/InstrumentSans-Medium.ttf') format("truetype");
+}
+@font-face {
+    font-family: "Bold";
+    src: local("InstrumentSans-Bold"),
+    url('./assets/Instrument_Sans/static/InstrumentSans-Bold.ttf') format("truetype");
+}
+
