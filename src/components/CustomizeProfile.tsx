@@ -23,7 +23,7 @@ const CustomizeProfile = () => {
   const onSubmit: SubmitHandler<Profile> = (data) => console.log(data);
 
   return (
-    <div className="bg-white rounded-xl max-w-full w-full max-h-full flex flex-col">
+    <div className="relative bg-white rounded-xl max-w-full w-full max-h-full flex flex-col">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="px-10">
 
@@ -65,7 +65,7 @@ const CustomizeProfile = () => {
             </div>
           </div>
         </div>
-        <div className=" h-[100px] w-full mt-auto p-5 flex  justify-end border-t-2 border-[#D9D9D9]">
+        <div className=" h-[100px] w-full mt-auto p-5 flex  justify-end border-t-2 border-[#D9D9D9] absolute inset-x-0 bottom-0">
           <button type="submit" className="flex justify-center items-center gap-2 py-2.5 px-5 me-2 mb-2 text-sm font-medium  focus:outline-none rounded-lg border border-gray-200 hover:bg-[#EFEBFF] hover:text-[#633CFF] focus:z-10 focus:ring-4 focus:ring-gray-100 text-[white] border-[#633CFF] bg-[#633CFF] hover:bg-[#4b31b5] hover:text-white" disabled={isSubmitting}>save</button>
           {/* <Button type="submit" icon="" className="text-[white] border-[#633CFF] bg-[#633CFF] hover:bg-[#4b31b5] hover:text-white" handleClick={() => { }} /> */}
         </div>

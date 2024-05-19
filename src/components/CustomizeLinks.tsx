@@ -4,7 +4,7 @@ import AddIcon from "./AddIcon";
 
 const CustomizeLinks = () => {
   return (
-    <div className="bg-white rounded-xl w-full max-w-full max-h-full  flex flex-col">
+    <div className="relative bg-white rounded-xl w-full max-w-full max-h-full  flex flex-col">
       <div className="px-10">
 
       <div className="font-bold text-3xl mb-5 mt-20">Customize your links</div>
@@ -17,7 +17,7 @@ const CustomizeLinks = () => {
         <div className="text-sm mt-5">Use the “Add new link” button to get started. Once you have more than one link, you can reorder and edit them. We’re here to help you share your profiles with everyone!</div>
       </div>
       </div>
-      <div className=" h-[100px] w-full mt-auto p-5 flex  justify-end border-t-2 border-[#D9D9D9]">
+      <div className=" h-[100px] w-full mt-auto p-5 flex  justify-end border-t-2 border-[#D9D9D9] absolute inset-x-0 bottom-0">
       <Button name="Save" icon="" className="text-[white] border-[#633CFF] bg-[#BEADFF] hover:text-white" handleClick={() => { }} />
       </div>
     </div>
