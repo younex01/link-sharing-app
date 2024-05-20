@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 import ErrorPage from './error-page.tsx';
 import Preview from './Preview.tsx';
+import Profile from './Profile.tsx';
+
 
 
 const router = createBrowserRouter([
@@ -19,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/preview",
     element: <Preview />
+  },
+  {
+    path: "/profile",
+    element: <Profile />
   },
 ]);
 

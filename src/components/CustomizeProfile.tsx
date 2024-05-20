@@ -5,6 +5,7 @@ import Input from "./Input"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod"
+import ImageUpload from "./ImageUpload";
 
 
 
@@ -31,16 +32,7 @@ const CustomizeProfile = () => {
           <div className="text-sm mb-10">Add your details to create a personal touch to your profile.</div>
           <div className="flex flex-row items-center justify-between bg-[#FAFAFA]">
             <div className="ml-3">Profile picture</div>
-            <label className="bg-[#EFEBFF] w-[193px] h-[193px] flex items-center justify-center  rounded-2xl mt-5 mb-5">
-              <input type="file" className="opacity-0 absolute w-[193px] h-[193px]" />
-              <div className="flex flex-col justify-center items-center text-[#633CFF] ">
-                <FaRegImage className="text-3xl mb-2 " />
-                <div className="flex flex-row justify-center items-center">
-                  <FaPlus />
-                  <div>Upload Image</div>
-                </div>
-              </div>
-            </label>
+            <ImageUpload />
             <div className="text-sm max-w-[220px]">Image must be below 1024x1024px. Use PNG or JPG format.</div>
           </div>
           <div className="bg-[#FAFAFA] rounded-xl w-full max-w-full p-12 flex flex-col items-center gap-5 mt-5">
