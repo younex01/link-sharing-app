@@ -6,10 +6,22 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod"
 import ImageUpload from "./ImageUpload";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../state/store";
+import { useEffect } from "react";
+import { setProfile } from "../state/profile/Profile";
 
+
+interface ProfileType{
+  first_name: string;
+  last_name:string;
+  email:string;
+}
 
 
 const CustomizeProfile = () => {
+  const profile = useSelector((state:RootState) => state.profile);
+  const dispatch = useDispatch();
 
   const mySchema = z.object({
     first_name: z.string().min(1, {message: "Can’t be empty"}),
@@ -21,7 +33,15 @@ const CustomizeProfile = () => {
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Profile>({resolver: zodResolver(mySchema)});
 
-  const onSubmit: SubmitHandler<Profile> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<ProfileType> = (data) => {
+    console.log("data",data);
+    dispatch(setProfile(data));
+    console.log("profile state:",profile);
+  };
+
+  useEffect(()=>{
+    console.log("profile state from store redux:",profile);
+  },[])
 
   return (
     <div className="relative bg-white rounded-xl max-w-full w-full max-h-full flex flex-col">
@@ -40,19 +60,19 @@ const CustomizeProfile = () => {
             <div className="flex justify-stretch items-center w-full">
               <label className="block mb-2 w-fit text-sm font-medium text-[#737373]">First name*</label>
               <div className="ml-auto w-[300px]">
-              <Input type="text" placeholder="e.g. John" register={register('first_name')} error={errors.first_name} errorMessage={errors.first_name?.message}/>
+              <Input type="text" value={profile.first_name} placeholder="e.g. John" register={register('first_name')} error={errors.first_name} errorMessage={errors.first_name?.message}/>
               </div>
             </div>
             <div className="flex justify-stretch items-center w-full">
               <label className="block mb-2 w-fit text-sm font-medium text-[#737373]">Last name*</label>
               <div className="ml-auto w-[300px]">
-              <Input type="text" placeholder="e.g. Appleseed" register={register('last_name')} error={errors.last_name} errorMessage={errors.last_name?.message}/>
+              <Input type="text" value={profile.last_name} placeholder="e.g. Appleseed" register={register('last_name')} error={errors.last_name} errorMessage={errors.last_name?.message}/>
               </div>
             </div>
             <div className="flex justify-stretch items-center w-full">
               <label className="block mb-2 w-fit text-sm font-medium text-[#737373]">Email</label>
               <div className="ml-auto w-[300px]">
-                <Input type="email" placeholder="e.g. email@example.com" register={register('email')} />
+                <Input type="email" value={profile.email} placeholder="e.g. email@example.com" register={register('email')} />
               </div>
             </div>
           </div>
