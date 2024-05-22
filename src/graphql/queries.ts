@@ -1,17 +1,13 @@
 import { gql } from '@apollo/client';
 
-export const GET_LINKS_WITH_USER = gql`
-query GetLinksWithUser {
-  links {
+export const GET_PROFILES = gql`
+query get_profiles {
+  profile {
     id
-    url
-    description
-    platform
-    user {
-      id
-      first_name
-      last_name
-    }
+    last_name
+    first_name
+    email
+    avatar
   }
 }
 `;

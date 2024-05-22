@@ -1,14 +1,30 @@
 import { gql } from '@apollo/client';
 
-export const ADD_LINK = gql`
-  mutation AddLink($url: String!, $description: String!, $platform: String!, $userId: UUID!) {
-    insert_links(objects: { url: $url, description: $description, platform: $platform, user_id: $userId }) {
+export const ADD_PROFILE = gql`
+  mutation AddProfile($first_name: String!, $last_name: String!, $email: String!, $avatar: String) {
+    insert_profile(objects: { first_name: $first_name, last_name: $last_name, email: $email, avatar: $avatar }) {
       returning {
         id
-        url
-        description
-        platform
+        first_name
+        last_name
+        email
+        avatar
       }
     }
   }
+`;
+
+export const UPDATE_PROFILE = gql`
+  mutation UpdateProfile($id: Int!, $first_name: String, $last_name: String, $email: String, $avatar: String) {
+    update_profile_by_pk(
+    pk_columns: { id: $id },
+    _set: { first_name: $first_name, last_name: $last_name, email: $email, avatar: $avatar }
+  ) {
+    id
+    first_name
+    last_name
+    email
+    avatar
+  }
+}
 `;

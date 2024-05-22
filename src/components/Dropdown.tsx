@@ -5,7 +5,7 @@ import { IoLogoLinkedin } from "react-icons/io";
 import { FaYoutube } from "react-icons/fa";
 import { PiGithubLogoFill } from "react-icons/pi";
 
-const Dropdown = () => {
+const Dropdown = ({setPlatforms}:any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [clickedValue, setClickedValue] = useState<string | null>(null);
@@ -24,6 +24,7 @@ const Dropdown = () => {
 
   useEffect(() => {
     console.log(clickedValue);
+    setPlatforms(clickedValue);
   }, [clickedValue])
 
   const menuItems = [

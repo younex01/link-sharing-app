@@ -6,11 +6,11 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod"
 import ImageUpload from "./ImageUpload";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../state/store";
-import { useEffect } from "react";
-import { setProfile } from "../state/profile/Profile";
-
+import { DocumentNode, useQuery, useMutation } from '@apollo/client';
+import { GET_PROFILES } from "../graphql/queries";
+import { ADD_PROFILE } from "../graphql/mutations";
+import { UPDATE_PROFILE } from "../graphql/mutations";
+import Profile from "@/Profile";
 
 interface ProfileType{
   first_name: string;
@@ -20,8 +20,10 @@ interface ProfileType{
 
 
 const CustomizeProfile = () => {
-  const profile = useSelector((state:RootState) => state.profile);
-  const dispatch = useDispatch();
+ 
+  const {loading, error, data} = useQuery(GET_PROFILES);
+  const [addProfile] = useMutation(ADD_PROFILE ,{refetchQueries: [{ query: GET_PROFILES }]});
+  const [updateProfile] = useMutation(UPDATE_PROFILE ,{refetchQueries: [{ query: GET_PROFILES }]});
 
   const mySchema = z.object({
     first_name: z.string().min(1, {message: "Can’t be empty"}),
@@ -33,15 +35,32 @@ const CustomizeProfile = () => {
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Profile>({resolver: zodResolver(mySchema)});
 
-  const onSubmit: SubmitHandler<ProfileType> = (data) => {
-    console.log("data",data);
-    dispatch(setProfile(data));
-    console.log("profile state:",profile);
+  const onSubmit: SubmitHandler<ProfileType> = async (Data) => {
+    console.log("Data",Data);
+    try{
+      if(data.profile.length !== 0 && data.profile[0].id)
+      {
+        console.log("updated");
+        await updateProfile({ variables: { id: data.profile[0].id, first_name: Data.first_name, last_name: Data.last_name, email: Data.email } });
+      }
+      else
+      {
+        console.log("added");
+        await addProfile({ variables: { first_name: Data.first_name, last_name: Data.last_name, email: Data.email} })
+      }
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
   };
 
-  useEffect(()=>{
-    console.log("profile state from store redux:",profile);
-  },[])
+  console.log("--->",data);
+
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+
+  // console.log(data.profile[0].first_name);
 
   return (
     <div className="relative bg-white rounded-xl max-w-full w-full max-h-full flex flex-col">
@@ -60,19 +79,19 @@ const CustomizeProfile = () => {
             <div className="flex justify-stretch items-center w-full">
               <label className="block mb-2 w-fit text-sm font-medium text-[#737373]">First name*</label>
               <div className="ml-auto w-[300px]">
-              <Input type="text" value={profile.first_name} placeholder="e.g. John" register={register('first_name')} error={errors.first_name} errorMessage={errors.first_name?.message}/>
+              <Input type="text" value={data !== undefined && data.profile.length !== 0 ? data.profile[0].first_name : ''} placeholder="e.g. John" register={register('first_name')} error={errors.first_name} errorMessage={errors.first_name?.message}/>
               </div>
             </div>
             <div className="flex justify-stretch items-center w-full">
               <label className="block mb-2 w-fit text-sm font-medium text-[#737373]">Last name*</label>
               <div className="ml-auto w-[300px]">
-              <Input type="text" value={profile.last_name} placeholder="e.g. Appleseed" register={register('last_name')} error={errors.last_name} errorMessage={errors.last_name?.message}/>
+              <Input type="text"  value={data !== undefined && data.profile.length !== 0 ? data.profile[0].last_name : ''} placeholder="e.g. Appleseed" register={register('last_name')} error={errors.last_name} errorMessage={errors.last_name?.message}/>
               </div>
             </div>
             <div className="flex justify-stretch items-center w-full">
               <label className="block mb-2 w-fit text-sm font-medium text-[#737373]">Email</label>
               <div className="ml-auto w-[300px]">
-                <Input type="email" value={profile.email} placeholder="e.g. email@example.com" register={register('email')} />
+                <Input type="email" value={data !== undefined && data.profile.length !== 0 ? data.profile[0].email : ''} placeholder="e.g. email@example.com" register={register('email')} error={errors.email} errorMessage={errors.email?.message}/>
               </div>
             </div>
           </div>
@@ -86,6 +105,5 @@ const CustomizeProfile = () => {
   )
 }
 
-export default CustomizeProfile
 
-//bg-white rounded-xl max-w-full max-h-full border-2 flex flex-col
+export default CustomizeProfile;

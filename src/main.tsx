@@ -15,9 +15,13 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 
 const client = new ApolloClient({
-  uri: 'https://flyby-router-demo.herokuapp.com/',
+  uri: 'https://driven-liger-69.hasura.app/v1/graphql',
+  headers: {
+    'x-hasura-admin-secret': 'QADB45y1TPghRC4j4D2lSTJcxfD32gTdSIICU2Sf41OTxQok3oiW8jIF9ohxeefR',
+  },
   cache: new InMemoryCache(),
 });
+
 
 const router = createBrowserRouter([
   {
