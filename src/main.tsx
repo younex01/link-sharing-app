@@ -11,6 +11,13 @@ import Preview from './Preview.tsx';
 import Profile from './Profile.tsx';
 import { store } from './state/store.ts';
 import { Provider } from 'react-redux';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+
+const client = new ApolloClient({
+  uri: 'https://flyby-router-demo.herokuapp.com/',
+  cache: new InMemoryCache(),
+});
 
 const router = createBrowserRouter([
   {
@@ -30,8 +37,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <ApolloProvider client={client}>
     <RouterProvider router={router} />
-    </Provider>
+    </ApolloProvider>
   </React.StrictMode>,
 )
