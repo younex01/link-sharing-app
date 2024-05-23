@@ -5,7 +5,7 @@ import { IoLogoLinkedin } from "react-icons/io";
 import { FaYoutube } from "react-icons/fa";
 import { PiGithubLogoFill } from "react-icons/pi";
 
-const Dropdown = ({setPlatforms}:any) => {
+const Dropdown = ({value, setPlatforms, register, index:idx}:any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [clickedValue, setClickedValue] = useState<string | null>(null);
@@ -22,17 +22,26 @@ const Dropdown = ({setPlatforms}:any) => {
     setIsOpen(!isOpen);
   };
 
-  useEffect(() => {
-    console.log(clickedValue);
-    setPlatforms(clickedValue);
-  }, [clickedValue])
-
+  
   const menuItems = [
     { icon: <PiGithubLogoFill />, label: 'Github' },
     { icon: <FaYoutube />, label: 'Youtube' },
     { icon: <IoLogoLinkedin />, label: 'Linkedin' },
   ];
-
+  useEffect(()=>{
+    menuItems.map((item)=>{
+      if(item.label === value)
+      {
+        setClickedValue(value);
+        setClickedIcon(item.icon);
+      }
+    })
+  },[])
+  
+  useEffect(() => {
+    console.log(clickedValue);
+    setPlatforms(clickedValue, idx);
+  }, [clickedValue])
 
   return (
     <div className="relative inline-block text-left w-full">
@@ -41,6 +50,7 @@ const Dropdown = ({setPlatforms}:any) => {
         data-dropdown-toggle="dropdown"
         className={`text-black w-full bg-white border hover:bg-blue-800  focus:outline-none   rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ${isOpen ? 'shadow-md shadow-purple-200 border-blue' : ''}`}
         type="button"
+        {...register}
         onClick={handleToggle}
       >
         {!clickedValue ? <div>Choose a platform</div> :

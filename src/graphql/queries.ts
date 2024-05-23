@@ -11,3 +11,13 @@ query get_profiles {
   }
 }
 `;
+
+
+export const GET_LINKS = gql`
+query get_links {
+  links {
+    platform_name
+    link
+  }
+}
+`

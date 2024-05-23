@@ -10,7 +10,7 @@ function App() {
     <>
     <div className="bg-[#FAFAFA]">
 
-    <div className=" h-screen flex flex-col items-center gap-5 mx-10 ">
+    <div className=" h-screen overflow-hidden flex flex-col items-center gap-5 mx-10 ">
       <div className="w-full ">
 
       <Nav />
