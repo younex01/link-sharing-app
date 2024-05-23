@@ -91,12 +91,11 @@ const CustomizeLinks = () => {
               </div>
             </div>
           ) : (
-           
-            <>
+            <Reorder.Group axis="y" values={Array.from({ length: addNew })}>
 
             {data.links.map((item, idx) => (
-            
-              <div  className="w-full bg-gray-100 p-5 rounded-xl mt-5" key={idx}>
+              <Reorder.Item key={idx}>
+              <div  className="w-full bg-gray-100 p-5 rounded-xl mt-5">
                 <div className="flex justify-between text-md mb-3">
                   <div className="flex items-center justify-center gap-2">
                   <MdOutlineDragHandle />
@@ -115,11 +114,11 @@ const CustomizeLinks = () => {
                   </div>
                 </div>
               </div>
-             
+              </Reorder.Item>
             ))}
             {Array.from({ length: addNew }).map((_, idx) => (
-              
-              <div  className="w-full bg-gray-100 p-5 rounded-xl mt-5" key={idx + data.links.length}>
+              <Reorder.Item key={idx + data.links.length }>
+              <div  className="w-full bg-gray-100 p-5 rounded-xl mt-5">
                 <div className="flex justify-between text-md mb-3">
                   <div className="flex items-center justify-center gap-2">
                   <MdOutlineDragHandle />
@@ -138,9 +137,9 @@ const CustomizeLinks = () => {
                   </div>
                 </div>
               </div>
-
+              </Reorder.Item>
             ))}
-           </>
+            </Reorder.Group>
           )
         }
         </div>
