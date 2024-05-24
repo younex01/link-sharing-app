@@ -16,6 +16,7 @@ query get_profiles {
 export const GET_LINKS = gql`
 query get_links {
   links {
+    id
     platform_name
     link
   }

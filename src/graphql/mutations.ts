@@ -48,3 +48,11 @@ mutation DeleteAllLinks {
   }
 }
 `
+
+export const DELETE_LINK = gql`
+  mutation DeleteLink($id: Int!) {
+    delete_links_by_pk(id: $id) {
+      id
+    }
+  }
+`;

@@ -22,7 +22,6 @@ const Dropdown = ({value, setPlatforms, register, index:idx}:any) => {
     setIsOpen(!isOpen);
   };
 
-  
   const menuItems = [
     { icon: <PiGithubLogoFill />, label: 'Github' },
     { icon: <FaYoutube />, label: 'Youtube' },
