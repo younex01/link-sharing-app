@@ -1,6 +1,6 @@
 import { UseFormRegisterReturn } from "react-hook-form";
 import Icon_chain from "./icons/icon_chain";
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 
 interface InputType {
   placeholder: string;
@@ -15,6 +15,10 @@ const Input = (props: InputType) => {
 
   const [inputValue, setInputValue] = useState<string>(props.value);
 
+  useEffect(()=>{
+    setInputValue(props.value);
+  },[props.value])
+  
   const handleInputChange = (event:any) => {
     setInputValue(event.target.value);
   };

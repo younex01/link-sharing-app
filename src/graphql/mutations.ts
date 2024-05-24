@@ -32,7 +32,7 @@ export const ADD_LINKS = gql`
   mutation AddLinks($profile_id: Int!, $platform_name: String! ,$link: String!) {
     insert_links_one(object: {profile_id: $profile_id, platform_name: $platform_name , link: $link}) {
       
-        id
+        id_
         profile_id
         platform_name
         link
@@ -51,8 +51,23 @@ mutation DeleteAllLinks {
 
 export const DELETE_LINK = gql`
   mutation DeleteLink($id: Int!) {
-    delete_links_by_pk(id: $id) {
-      id
+    delete_links_by_pk(id_: $id) {
+      id_
+    }
+  }
+`;
+
+export const UPDATE_PROFILE_AVATAR = gql`
+  mutation UpdateProfile($id: Int!, $avatar: String!) {
+    update_profile(
+      where: { id: { _eq: $id } }
+      _set: { avatar: $avatar }
+    ) {
+      affected_rows
+      returning {
+        id
+        avatar
+      }
     }
   }
 `;

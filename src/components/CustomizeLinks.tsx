@@ -9,29 +9,55 @@ import ButtonP from "./ButtonP";
 import { Reorder } from "framer-motion";
 import { MdOutlineDragHandle } from "react-icons/md";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
-import { GET_LINKS } from "../graphql/queries";
+import { GET_LINKS, GET_PROFILES } from "../graphql/queries";
 import {  useMutation, useQuery } from "@apollo/client";
-import { ADD_LINKS, DELETE_LINK, DELETE_LINKS } from "../graphql/mutations";
+import { ADD_LINKS, ADD_PROFILE, DELETE_LINK, DELETE_LINKS } from "../graphql/mutations";
 
 
 const CustomizeLinks = () => {
   const [platforms, setPlatforms] = useState<string[]>([]);
   const {loading, error, data} = useQuery(GET_LINKS);
+  const { data: dataProfile } = useQuery(GET_PROFILES);
   const [Addlinks] = useMutation(ADD_LINKS ,{refetchQueries: [{ query: GET_LINKS, errorPolicy: 'all' }]});
   const [deletelinks] = useMutation(DELETE_LINKS ,{refetchQueries: [{ query: GET_LINKS, errorPolicy: 'all' }]});
   const [deleteLink] = useMutation(DELETE_LINK, {refetchQueries: [{ query: GET_LINKS }], });
+  const [addProfile] = useMutation(ADD_PROFILE, { refetchQueries: [{ query: GET_PROFILES }] , awaitRefetchQueries: true},);
 
+  
   const { register, control, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
       links: [], 
     },
   });
-
+  
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'links',
   });
 
+  useEffect(() => {
+    console.log("++--++>>",dataProfile);
+    // if(!dataProfile.data.profile[0])
+    //   {
+    //     // await addProfile({ variables: {id: 20, first_name: "", last_name: "", email: "" ,avatar: null} })
+    //   }
+
+      // const checkAndAddProfile = async () => {
+      //   if (!dataProfile || !dataProfile.profile[0]) {
+      //     console.log("++--++", dataProfile);
+      //     try {
+      //       await addProfile({
+      //         variables: { id: 20, first_name: "", last_name: "", email: "", avatar: null },
+      //       });
+      //     } catch (error) {
+      //       console.error("Error adding profile:", error);
+      //     }
+      //   }
+      // };
+  
+      // checkAndAddProfile();
+  }, [])
+  
   useEffect(() => {
     if (data && data.links) {
       reset({ links: data.links });
@@ -44,15 +70,21 @@ const CustomizeLinks = () => {
     console.log("------------------>",Data);
     console.log("platform",platforms);
     try{
+      console.log("--++--",dataProfile.profile);
+      // if(!dataProfile.profile[0])
+      // {
+      //   await addProfile({ variables: { first_name: "", last_name: "", email: "" ,avatar: null} })
+      //   await new Promise(resolve => setTimeout(resolve, 10000));
+      // }
       await deletelinks();
+      // console.log('dkhalllllll',data);
       for(let i : number = 0; i < platforms.length; i++)
       {
         console.log("+++++");
         console.log(platforms[i], Data.links[i].link);
-        await Addlinks({variables: {profile_id: 11, platform_name: platforms[i] , link: Data.links[i].link}})
+        await Addlinks({variables: {profile_id: dataProfile.profile[0].id, platform_name: platforms[i] , link: Data.links[i].link}})
       }
       setPlatforms([]);
-      setAddNew(0);
     }
     catch(error)
     {
@@ -80,18 +112,17 @@ const CustomizeLinks = () => {
     });
   };
 
-  const handleRemove = (idx: number, id?: any) => {
-    // if (id) {
-    //   deleteLink({ variables: { id } })
-    //     .then(() => {
-    //       remove(idx);
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error deleting link:', error);
-    //     });
-    // } else {
-    //   remove(idx);
-    // }
+  const handleRemove = async (idx: number, id: number) => {
+    try{
+
+      if(id)
+        await deleteLink({variables: {id}});
+      remove(idx);
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
     console.log(id);
   };
 
@@ -108,7 +139,7 @@ const CustomizeLinks = () => {
           <ButtonS
             icon={<FaPlus />}
             text="Add new link"
-            handleClick={() => append({ platform_name: '', link: '' })}
+            handleClick={() => append({id:null, platform_name: '', link: '' })}
           />
         </div>
         <div className="pb-4">
@@ -131,7 +162,7 @@ const CustomizeLinks = () => {
                         <MdOutlineDragHandle />
                         <div className="font-bold">Link #{idx + 1}</div>
                       </div>
-                      <button type="button" onClick={() => handleRemove(idx, field)}>
+                      <button type="button" onClick={() => handleRemove(idx, field.id_)}>
                         Remove
                       </button>
                     </div>
@@ -175,3 +206,7 @@ const CustomizeLinks = () => {
 }
 
 export default CustomizeLinks
+
+function getValues(arg0: string) {
+  throw new Error("Function not implemented.");
+}

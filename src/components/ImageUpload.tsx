@@ -1,15 +1,41 @@
-import { useState } from "react";
+import { GET_PROFILES } from "../graphql/queries";
+import { UPDATE_PROFILE_AVATAR } from "../graphql/mutations";
+import { useMutation } from "@apollo/client";
+import { useEffect, useState } from "react";
 import { FaPlus, FaRegImage } from "react-icons/fa6"
 
-const ImageUpload = () => {
-    const [selectedImage, setSelectedImage] = useState();
+interface ImageType{
+    value: string;
+    id: number;
+}
 
-    const handleImageChange = (event) => {
+const ImageUpload = ({value, id}: ImageType) => {
+    const [selectedImage, setSelectedImage] = useState();
+    const [updateAvatar, { data, loading, error }] = useMutation(UPDATE_PROFILE_AVATAR, {refetchQueries: [{ query: GET_PROFILES }]});
+
+    useEffect(()=>{
+        console.log("image_value",value);
+        setSelectedImage(value);
+    },[value])
+
+    const handleImageChange =  (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = async (e) => {
                 setSelectedImage(e.target.result);
+                console.log(id,"---",selectedImage,"---",e.target?.result,"--",value);
+                try {
+                    const response = await updateAvatar({
+                      variables: {
+                        id: id,
+                        avatar: e.target?.result, // Replace with the actual avatar URL
+                      },
+                    });
+                    console.log('Profile updated:', response.data.update_profile.returning);
+                  } catch (err) {
+                    console.error('Error updating profile:', err);
+                  }
             };
             reader.readAsDataURL(file);
         }
