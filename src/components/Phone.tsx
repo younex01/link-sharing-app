@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { FaYoutube } from "react-icons/fa6";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { IoLogoLinkedin } from "react-icons/io";
+import ArrowRight from "./icons/ArrowRight";
 
 
 const platforms = [
@@ -54,9 +55,16 @@ const Phone = () => {
                       style={{
                         backgroundColor: item ? platforms.find((platform) => platform.text === item.platform_name)?.color || '#ffffff' : '#ffffff',
                       }}
-                      className="w-[237px] h-[44px] bg-white rounded-xl mx-auto mb-auto flex justify-center items-center text-white"
+                      className="w-[237px] h-[44px] bg-white rounded-xl mx-auto mb-auto flex justify-center items-center text-white p-4"
                     >
-                      {item ? item.platform_name : ''}
+                      <div className="relative flex flex-row gap-3 items-center flex-grow">
+                        {item ? platforms.find((platform) => platform.text === item.platform_name)?.icon : ""}
+                        {item ? item.platform_name : ''}
+                        <div className="absolute right-0 translate-y-0.5">
+                        {item ? <ArrowRight /> : ''}
+                          
+                        </div>
+                      </div>
                     </div>
                   );
                 })
