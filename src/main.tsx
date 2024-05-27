@@ -12,6 +12,7 @@ import Profile from './Profile.tsx';
 import { store } from './state/store.ts';
 import { Provider } from 'react-redux';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 
 const client = new ApolloClient({
@@ -23,10 +24,13 @@ const client = new ApolloClient({
 });
 
 
+const domain = import.meta.env.VITE_REACT_APP_AUTH0_DOMAIN;
+const clientId = import.meta.env.VITE_REACT_APP_AUTH0_CLIENT_ID;
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element:  <App />,
+    element: <App />,
     errorElement: <ErrorPage />,
   },
   {
@@ -38,11 +42,19 @@ const router = createBrowserRouter([
     element: <Profile />
   },
 ]);
+console.log(clientId, domain);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  
+
+  <Auth0Provider
+    domain={domain}
+    clientId={clientId}
+    authorizationParams={{
+      redirect_uri: window.location.origin
+    }}
+  >
     <ApolloProvider client={client}>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </ApolloProvider>
-,
+  </Auth0Provider>
 )

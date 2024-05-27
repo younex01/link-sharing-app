@@ -73,13 +73,16 @@ const Preview = () => {
       </div>
       <div className="flex justify-center ">
 
-      <div className="absolute top-1/4 w-1/5 h-2/4 bg-white rounded-3xl flex justify-center flex-col items-center px-12">
+      <div className="absolute top-1/4 w-1/5 h-2/4 bg-white rounded-3xl flex justify-center flex-col items-center px-12 ">
+        <div className="relative flex justify-center flex-col items-center w-full h-full">
+
+
       <div className="h-[104px] w-[104px] rounded-full bg-blue border-2 border-blue">
         {dataProfile.profile ? <img src={dataProfile.profile[0].avatar} alt={`${dataProfile.profile[0].first_name} ${dataProfile.profile[0].last_name}`} className="h-full w-full rounded-full object-cover" /> : null}
       </div>
       <div className="text-2xl font-bold my-5 ">{`${dataProfile.profile[0].first_name} ${dataProfile.profile[0].last_name}`}</div>
       <div className="text-sm mb-10">{dataProfile.profile[0].email}</div>
-        <div className="w-full p-2 ">
+        <div className="relative w-full p-2 ">
 
       {
       // User.links.map((item, index) => (
@@ -122,6 +125,7 @@ const Preview = () => {
         );
       })
       }
+      </div>
       </div>
       </div>
       </div>
