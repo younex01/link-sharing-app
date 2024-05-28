@@ -13,6 +13,7 @@ import { store } from './state/store.ts';
 import { Provider } from 'react-redux';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Auth0Provider } from '@auth0/auth0-react';
+import ProtectedRoutes from './ProtectedRoutes.tsx';
 
 
 const client = new ApolloClient({
@@ -27,19 +28,42 @@ const client = new ApolloClient({
 const domain = import.meta.env.VITE_REACT_APP_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_REACT_APP_AUTH0_CLIENT_ID;
 
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <App />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: "/preview",
+//     element: <Preview />
+//   },
+//   {
+//     path: "/profile",
+//     element: <Profile />
+//   },
+// ]);
+
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
+    path: '/',
+    element: <ProtectedRoutes />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: "/preview",
-    element: <Preview />
-  },
-  {
-    path: "/profile",
-    element: <Profile />
+        children: [
+          {
+            path: "/",
+            element: <App />,
+            errorElement: <ErrorPage />,
+          },
+          {
+            path: "/preview",
+            element: <Preview />
+          },
+          {
+            path: "/profile",
+            element: <Profile />
+          },
+        ],
   },
 ]);
 console.log(clientId, domain);
