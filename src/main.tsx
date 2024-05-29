@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Auth0Provider } from '@auth0/auth0-react';
 import ProtectedRoutes from './ProtectedRoutes.tsx';
+import { AuthenticationGuard } from './authentication-guard.tsx';
 
 
 const client = new ApolloClient({
@@ -28,44 +29,39 @@ const client = new ApolloClient({
 const domain = import.meta.env.VITE_REACT_APP_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_REACT_APP_AUTH0_CLIENT_ID;
 
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <App />,
-//     errorElement: <ErrorPage />,
-//   },
-//   {
-//     path: "/preview",
-//     element: <Preview />
-//   },
-//   {
-//     path: "/profile",
-//     element: <Profile />
-//   },
-// ]);
-
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <ProtectedRoutes />,
+    path: "/",
+    element: <AuthenticationGuard component={App} />,
     errorElement: <ErrorPage />,
-        children: [
-          {
-            path: "/",
-            element: <App />,
-            errorElement: <ErrorPage />,
-          },
-          {
-            path: "/preview",
-            element: <Preview />
-          },
-          {
-            path: "/profile",
-            element: <Profile />
-          },
-        ],
+  },
+  {
+    path: "/preview",
+    element: <AuthenticationGuard component={Preview} />
+  },
+  {
+    path: "/profile",
+    element: <AuthenticationGuard component={Profile} />
   },
 ]);
+
+// const router = createBrowserRouter([
+//   {
+//     path: '/',
+//     element:  <App />,
+//     errorElement: <ErrorPage />,
+//         children: [
+//           {
+//             path: "/preview",
+//             element: <Preview />
+//           },
+//           {
+//             path: "/profile",
+//             element: <Profile />
+//           },
+//         ],
+//   },
+// ]);
 console.log(clientId, domain);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

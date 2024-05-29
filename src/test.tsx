@@ -12,7 +12,6 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { GET_LINKS, GET_PROFILES } from "../graphql/queries";
 import {  useMutation, useQuery } from "@apollo/client";
 import { ADD_LINKS, ADD_PROFILE, DELETE_LINK, DELETE_LINKS } from "../graphql/mutations";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 
 const CustomizeLinks = () => {
@@ -23,7 +22,6 @@ const CustomizeLinks = () => {
   const [deletelinks] = useMutation(DELETE_LINKS ,{refetchQueries: [{ query: GET_LINKS, errorPolicy: 'all' }]});
   const [deleteLink] = useMutation(DELETE_LINK, {refetchQueries: [{ query: GET_LINKS }], });
   const [addProfile] = useMutation(ADD_PROFILE, { refetchQueries: [{ query: GET_PROFILES }] , awaitRefetchQueries: true},);
-  
 
   
   const { register, control, handleSubmit, formState: { errors }, reset } = useForm({
@@ -32,10 +30,33 @@ const CustomizeLinks = () => {
     },
   });
   
-  const { fields, append, remove, move } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'links',
   });
+
+  useEffect(() => {
+    console.log("++--++>>",dataProfile);
+    // if(!dataProfile.data.profile[0])
+    //   {
+    //     // await addProfile({ variables: {id: 20, first_name: "", last_name: "", email: "" ,avatar: null} })
+    //   }
+
+      // const checkAndAddProfile = async () => {
+      //   if (!dataProfile || !dataProfile.profile[0]) {
+      //     console.log("++--++", dataProfile);
+      //     try {
+      //       await addProfile({
+      //         variables: { id: 20, first_name: "", last_name: "", email: "", avatar: null },
+      //       });
+      //     } catch (error) {
+      //       console.error("Error adding profile:", error);
+      //     }
+      //   }
+      // };
+  
+      // checkAndAddProfile();
+  }, [])
   
   useEffect(() => {
     if (data && data.links) {
@@ -50,9 +71,17 @@ const CustomizeLinks = () => {
     console.log("platform",platforms);
     try{
       console.log("--++--",dataProfile.profile);
+      // if(!dataProfile.profile[0])
+      // {
+      //   await addProfile({ variables: { first_name: "", last_name: "", email: "" ,avatar: null} })
+      //   await new Promise(resolve => setTimeout(resolve, 10000));
+      // }
       await deletelinks();
+      // console.log('dkhalllllll',data);
       for(let i : number = 0; i < platforms.length; i++)
       {
+        console.log("+++++");
+        console.log(platforms[i], Data.links[i].link);
         await Addlinks({variables: {profile_id: dataProfile.profile[0].id, platform_name: platforms[i] , link: Data.links[i].link}})
       }
       setPlatforms([]);
@@ -84,8 +113,6 @@ const CustomizeLinks = () => {
   };
 
   const handleRemove = async (idx: number, id: number) => {
-
-    console.log("hereeeeee", id, idx);
     try{
 
       if(id)
@@ -97,29 +124,6 @@ const CustomizeLinks = () => {
       console.log(error);
     }
     console.log(id);
-  };
-
-  const handleDrag = async({ source, destination }) => {
-    if (destination) {
-      move(source.index, destination.index);
-      console.log("souce",source, "destionation",destination,fields);
-      try{
-        const copyField = fields[source.index];
-        fields[source.index] = fields[destination.index];
-        fields[destination.index] = copyField;
-        await deletelinks();
-        for(let i : number = 0; i < fields.length; i++)
-        {
-          console.log("P:",fields[i].platform_name,"L",fields[i].link);
-          await Addlinks({variables: {profile_id: dataProfile.profile[0].id, platform_name: fields[i].platform_name , link: fields[i].link}})
-        }
-        // setPlatforms([]);
-      }
-      catch(error)
-      {
-        console.log(error);
-      }
-    }
   };
 
 
@@ -149,63 +153,42 @@ const CustomizeLinks = () => {
               </div>
             </div>
           ) : (
-            <DragDropContext onDragEnd={handleDrag}>
-            <Droppable droppableId="links-items">
-              {(provided, snapshot) => (
-                <ul {...provided.droppableProps} ref={provided.innerRef}>
-                    {fields.map((field, idx) => {
-                      return (
-                        <Draggable
-                        key={`links[${idx}]`}
-                        draggableId={`item-${idx}`}
-                        index={idx}
-                        >
-                          {(provided, snapshot) => (
-                            <li
-                            className="w-full bg-gray-100 p-5 rounded-xl mt-5"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            
-                            >
-                              <div className="flex justify-between text-md mb-3">
-                                <div className="flex items-center justify-center gap-2">
-                                  <MdOutlineDragHandle />
-                                  <div className="font-bold">Link #{idx + 1}</div>
-                                </div>
-                                <button type="button" onClick={() => handleRemove(idx, field.id_)}>
-                                  Remove
-                                </button>
-                              </div>
-                              <div className="">
-                                <div className="mb-3">
-                                  <div className="text-sm">Platform</div>
-                                  <Dropdown
-                                    value={field.platform_name}
-                                    setPlatforms={handlePlatforms}
-                                    index={idx}
-                                    />
-                                </div>
-                                <div>
-                                  <div>Link</div>
-                                  <Input
-                                    value={field.link}
-                                    placeholder="e.g. https://www.website.com/johnappleseed"
-                                    type="text"
-                                    register={register(`links.${idx}.link`)}
-                                    />
-                                </div>
-                              </div>
-                            </li>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-</DragDropContext>
+            <Reorder.Group axis="y" values={fields.map((field) => field.id)}>
+              {fields.map((field, idx) => (
+                <Reorder.Item key={field.id} value={field.id}>
+                  <div className="w-full bg-gray-100 p-5 rounded-xl mt-5">
+                    <div className="flex justify-between text-md mb-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <MdOutlineDragHandle />
+                        <div className="font-bold">Link #{idx + 1}</div>
+                      </div>
+                      <button type="button" onClick={() => handleRemove(idx, field.id_)}>
+                        Remove
+                      </button>
+                    </div>
+                    <div className="">
+                      <div className="mb-3">
+                        <div className="text-sm">Platform</div>
+                        <Dropdown
+                          value={field.platform_name}
+                          setPlatforms={handlePlatforms}
+                          index={idx}
+                        />
+                      </div>
+                      <div>
+                        <div>Link</div>
+                        <Input
+                          value={field.link}
+                          placeholder="e.g. https://www.website.com/johnappleseed"
+                          type="text"
+                          register={register(`links.${idx}.link`)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Reorder.Item>
+              ))}
+            </Reorder.Group>
           )}
         </div>
       </div>
@@ -223,3 +206,7 @@ const CustomizeLinks = () => {
 }
 
 export default CustomizeLinks
+
+function getValues(arg0: string) {
+  throw new Error("Function not implemented.");
+}
