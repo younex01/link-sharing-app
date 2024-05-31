@@ -5,7 +5,7 @@ import { IoLogoLinkedin } from "react-icons/io";
 import { FaYoutube } from "react-icons/fa";
 import { PiGithubLogoFill } from "react-icons/pi";
 
-const Dropdown = ({value, setPlatforms, register, index:idx}:any) => {
+const Dropdown = ({value, onChange, register}:any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [clickedValue, setClickedValue] = useState<string | null>(null);
@@ -20,6 +20,7 @@ const Dropdown = ({value, setPlatforms, register, index:idx}:any) => {
     setClickedValue(value);
     setClickedIcon(icon);
     setIsOpen(!isOpen);
+    onChange(value);
   };
 
   const menuItems = [
@@ -37,10 +38,10 @@ const Dropdown = ({value, setPlatforms, register, index:idx}:any) => {
     })
   },[])
   
-  useEffect(() => {
-    console.log(clickedValue);
-    setPlatforms(clickedValue, idx);
-  }, [clickedValue])
+  // useEffect(() => {
+  //   console.log(clickedValue);
+  //   setPlatforms(clickedValue, idx);
+  // }, [clickedValue])
 
   return (
     <div className="relative inline-block text-left w-full">
