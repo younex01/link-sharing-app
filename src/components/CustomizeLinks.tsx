@@ -11,7 +11,7 @@ import { MdOutlineDragHandle } from "react-icons/md";
 import { useForm, SubmitHandler, useFieldArray, Controller } from "react-hook-form";
 import { GET_LINKS, GET_PROFILES } from "../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
-import { ADD_LINKS, ADD_PROFILE, DELETE_LINK, DELETE_LINKS } from "../graphql/mutations";
+import { ADD_LINKS, ADD_PROFILE, DELETE_LINK, DELETE_LINKS, INSERT_ONE_LINK, INSERT_ONE_LINK_DD } from "../graphql/mutations";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 
@@ -23,12 +23,20 @@ const CustomizeLinks = () => {
   const [deletelinks] = useMutation(DELETE_LINKS, { refetchQueries: [{ query: GET_LINKS, errorPolicy: 'all' }] });
   const [deleteLink] = useMutation(DELETE_LINK, { refetchQueries: [{ query: GET_LINKS }], });
   const [addProfile] = useMutation(ADD_PROFILE, { refetchQueries: [{ query: GET_PROFILES }], awaitRefetchQueries: true },);
+  const [insertOneLink] = useMutation(INSERT_ONE_LINK, {
+    refetchQueries: [{ query: GET_LINKS }],
+    errorPolicy: 'all'
+  });
+  const [insertOneLinkDd] = useMutation(INSERT_ONE_LINK_DD, {
+    refetchQueries: [{ query: GET_LINKS }],
+    errorPolicy: 'all'
+  });
 
 
 
   const { register, control, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
-      links: [],
+      links: data?.links || [],
     },
   });
 
@@ -40,22 +48,22 @@ const CustomizeLinks = () => {
   useEffect(() => {
     if (data && data.links) {
       reset({ links: data.links });
-      console.log(fields);
+      console.log("fields: ",fields);
     }
   }, [data]);
-  console.log("fieldsss", fields);
 
   const onSubmit: SubmitHandler<any> = async (Data) => {
     console.log("------------------>|||||", Data);
     console.log("platform", platforms);
     try {
       console.log("--++--", dataProfile.profile);
-      await deletelinks();
       for (let i: number = 0; i < Data.links.length; i++) {
         console.log("profile_id:", dataProfile.profile[0].id, " platform_name:", Data.links[i].platform_name, " link:", Data.links[i].link);
-        await Addlinks({ variables: { profile_id: dataProfile.profile[0].id, platform_name: Data.links[i].platform_name, link: Data.links[i].link } })
+        await insertOneLink({ 
+           variables: {platform_name: Data.links[i].platform_name, link: Data.links[i].link,profile_id: dataProfile.profile[0].id} 
+        });
+
       }
-      setPlatforms([]);
     }
     catch (error) {
       console.log(error);
@@ -108,8 +116,11 @@ const CustomizeLinks = () => {
         fields[destination.index] = copyField;
         await deletelinks();
         for (let i: number = 0; i < fields.length; i++) {
-          console.log("P:", fields[i].platform_name, "L", fields[i].link);
+          console.log("id:",data.links[i].id_,"P:", fields[i].platform_name, "L", fields[i].link);
           await Addlinks({ variables: { profile_id: dataProfile.profile[0].id, platform_name: fields[i].platform_name, link: fields[i].link } })
+        //   await insertOneLinkDd({ 
+        //     variables: {platform_name: fields[i].platform_name, link: fields[i].link,profile_id: dataProfile.profile[0].id} 
+        //  });
         }
         // setPlatforms([]);
       }

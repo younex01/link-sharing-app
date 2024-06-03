@@ -71,3 +71,26 @@ export const UPDATE_PROFILE_AVATAR = gql`
     }
   }
 `;
+
+
+export const INSERT_ONE_LINK = gql`
+  mutation InsertOneLink($platform_name: String!, $link: String!, $profile_id: Int!) {
+    insert_links_one(object: {platform_name: $platform_name, link: $link, profile_id: $profile_id}, on_conflict: {constraint: links_link_key, update_columns: []}) {
+      id_
+      platform_name
+      link
+      profile_id
+    }
+  }
+`;
+
+export const INSERT_ONE_LINK_DD = gql`
+  mutation InsertOneLink($platform_name: String!, $link: String!, $profile_id: Int!) {
+    insert_links_one(object: {platform_name: $platform_name, link: $link, profile_id: $profile_id}, on_conflict: {constraint: links_link_key, update_columns: [created_at]}) {
+      id_
+      platform_name
+      link
+      profile_id
+    }
+  }
+`;
