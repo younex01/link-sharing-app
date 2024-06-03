@@ -34,7 +34,7 @@ const CustomizeLinks = () => {
 
 
 
-  const { register, control, handleSubmit, formState: { errors }, reset } = useForm({
+  const { register, control, handleSubmit, formState: { errors }, reset ,watch} = useForm({
     defaultValues: {
       links: data?.links || [],
     },
@@ -108,21 +108,29 @@ const CustomizeLinks = () => {
 
   const handleDrag = async ({ source, destination }) => {
     if (destination) {
+      console.log("souce", source, "destionation", destination, fields);
       move(source.index, destination.index);
       console.log("souce", source, "destionation", destination, fields);
       try {
         const copyField = fields[source.index];
+        console.log("dragggg",fields[source.index]);
         fields[source.index] = fields[destination.index];
         fields[destination.index] = copyField;
-        await deletelinks();
-        for (let i: number = 0; i < fields.length; i++) {
-          console.log("id:",data.links[i].id_,"P:", fields[i].platform_name, "L", fields[i].link);
-          await Addlinks({ variables: { profile_id: dataProfile.profile[0].id, platform_name: fields[i].platform_name, link: fields[i].link } })
+        console.log("length: ",fields);
+        // await deletelinks();
+        // for (let i: number = 0; i < fields.length; i++) {
+        //   console.log("length: ",fields.length);
+        //   console.log("P:", fields[i].platform_name, "L", fields[i].link);
+        //   if(!fields[i].platform_name || !fields[i].link)
+        //     continue;
+        //   console.log("hhere");
+        //   // await Addlinks({ variables: { profile_id: dataProfile.profile[0].id, platform_name: fields[i].platform_name, link: fields[i].link } })
         //   await insertOneLinkDd({ 
         //     variables: {platform_name: fields[i].platform_name, link: fields[i].link,profile_id: dataProfile.profile[0].id} 
         //  });
-        }
+        // }
         // setPlatforms([]);
+        // reset({ links: fields });
       }
       catch (error) {
         console.log(error);

@@ -14,29 +14,32 @@ const Dropdown = ({value, onChange, register}:any) => {
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
-
+  console.log("from drop down ->",value);
   const handleItemClick = (index: number, value: string, icon: any) => {
+    console.log("from drop down >-",value);
     setClickedIndex(index);
     setClickedValue(value);
     setClickedIcon(icon);
     setIsOpen(!isOpen);
     onChange(value);
   };
-
+  
+  // setClickedValue(value);
+  // onChange(value);
   const menuItems = [
     { icon: <PiGithubLogoFill />, label: 'Github' },
     { icon: <FaYoutube />, label: 'Youtube' },
     { icon: <IoLogoLinkedin />, label: 'Linkedin' },
   ];
-  useEffect(()=>{
-    menuItems.map((item)=>{
-      if(item.label === value)
-      {
-        setClickedValue(value);
-        setClickedIcon(item.icon);
-      }
-    })
-  },[])
+  // useEffect(()=>{
+  //   menuItems.map((item)=>{
+  //     if(item.label === value)
+  //     {
+  //       setClickedValue(value);
+  //       setClickedIcon(item.icon);
+  //     }
+  //   })
+  // },[value])
   
   // useEffect(() => {
   //   console.log(clickedValue);
@@ -53,10 +56,10 @@ const Dropdown = ({value, onChange, register}:any) => {
         {...register}
         onClick={handleToggle}
       >
-        {!clickedValue ? <div>Choose a platform</div> :
+        {!value ? <div>Choose a platform</div> :
         <div className={`flex flex-row gap-5 items-center text-gray-300`}>
           {clickedIcon}
-          {clickedValue}
+          {value}
         </div>}
         <div className="ml-5 flex items-center justify-center">
 
