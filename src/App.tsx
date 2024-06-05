@@ -1,34 +1,36 @@
+import { useMutation, useQuery } from "@apollo/client";
 import CustomizeLinks from "./components/CustomizeLinks"
 import Nav from "./components/Nav"
 import Phone from "./components/Phone"
 import { useAuth0 } from '@auth0/auth0-react';
+import { GET_LINKS, GET_PROFILES } from "./graphql/queries";
+import { DELETE_LINK, INSERT_ONE_LINK } from "./graphql/mutations";
+import { useEffect, useState } from "react";
 
 
 
 
 function App() {
+  const { data } = useQuery(GET_LINKS);
+  const { data: dataProfile } = useQuery(GET_PROFILES);
+  const [copyData,setCopyData] = useState({...data});
+  const [changed, setChanged] = useState<boolean>(false);
+  // const copyData = { ...data };
   
-  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
   
-  const handleLogin = async () => {
-    await loginWithRedirect({
-      appState: {
-        returnTo: "/",
-      },
-    });
-  };
+  useEffect(()=>{
+    setCopyData({...data})
+  },[data])
+  
+  // useEffect(()=>{
+  //   console.log("from parent component",copyData);
+  // },[copyData])
 
-  if (!isAuthenticated) {
-    console.log("----------->hereeee");
-    return(
-      <>
-      <div className="flex justify-center items-center h-screen">
-        <button onClick={handleLogin} className="w-[200px] border-black border-2">Sign In</button>
-      </div>
-      </>
-      );
-    }
-    console.log(user);
+  // const updateData = (newValue) => {
+  //   console.log("from updated data function", newValue);
+  //   setCopyData({...newValue});
+  // }
+  
   return (
     <>
     <div className="bg-[#FAFAFA]">
@@ -37,8 +39,8 @@ function App() {
             <Nav />
           </div>
           <div className="flex flex-row gap-5 w-full h-full mb-5">
-            <Phone />
-            <CustomizeLinks />
+            <Phone data={copyData} />
+            <CustomizeLinks data={copyData} setData={setCopyData} changed={changed} setChanged={setChanged}/>
           </div>
         </div>
       </div>

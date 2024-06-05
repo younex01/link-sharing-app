@@ -26,14 +26,14 @@ const platforms = [
   }
 ];
 
-const Phone = () => {
-  const { loading, error, data } = useQuery(GET_LINKS);
+const Phone = ({data}:any) => {
+  // const { loading, error, data } = useQuery(GET_LINKS);
   const { data: dataProfile } = useQuery(GET_PROFILES);
 
   useEffect(() => {
 
     console.log("from phone useEffect", data);
-  }, [dataProfile])
+  }, [dataProfile,data])
   console.log("from Phone", dataProfile);
 
   return (

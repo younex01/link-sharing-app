@@ -1,4 +1,4 @@
-import Button from "./Button"
+import Button from "./Button";
 import { FaPlus } from "react-icons/fa6";
 import AddIcon from "./AddIcon";
 import { useEffect, useState } from "react";
@@ -8,33 +8,44 @@ import ButtonS from "./ButtonS";
 import ButtonP from "./ButtonP";
 import { Reorder } from "framer-motion";
 import { MdOutlineDragHandle } from "react-icons/md";
-import { useForm, SubmitHandler, useFieldArray, Controller } from "react-hook-form";
+import {
+  useForm,
+  SubmitHandler,
+  useFieldArray,
+  Controller,
+} from "react-hook-form";
 import { GET_LINKS, GET_PROFILES } from "../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
-import { ADD_LINKS, ADD_PROFILE, DELETE_LINK, DELETE_LINKS, INSERT_ONE_LINK, INSERT_ONE_LINK_DD } from "../graphql/mutations";
+import {
+  ADD_LINKS,
+  ADD_PROFILE,
+  DELETE_LINK,
+  DELETE_LINKS,
+  INSERT_ONE_LINK,
+  INSERT_ONE_LINK_DD,
+} from "../graphql/mutations";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
+let arrayIds: number[] = [];
 
-const CustomizeLinks = () => {
-  const [platforms, setPlatforms] = useState<string[]>([]);
-  const { loading, error, data } = useQuery(GET_LINKS);
+const CustomizeLinks = ({ data, setData, changed, setChanged }: any) => {
+  // const { loading, error, data } = useQuery(GET_LINKS);
   const { data: dataProfile } = useQuery(GET_PROFILES);
-  const [Addlinks] = useMutation(ADD_LINKS, { refetchQueries: [{ query: GET_LINKS, errorPolicy: 'all' }] });
-  const [deletelinks] = useMutation(DELETE_LINKS, { refetchQueries: [{ query: GET_LINKS, errorPolicy: 'all' }] });
-  const [deleteLink] = useMutation(DELETE_LINK, { refetchQueries: [{ query: GET_LINKS }], });
-  const [addProfile] = useMutation(ADD_PROFILE, { refetchQueries: [{ query: GET_PROFILES }], awaitRefetchQueries: true },);
+  const [deleteLink] = useMutation(DELETE_LINK, {
+    refetchQueries: [{ query: GET_LINKS }],
+  });
   const [insertOneLink] = useMutation(INSERT_ONE_LINK, {
     refetchQueries: [{ query: GET_LINKS }],
-    errorPolicy: 'all'
-  });
-  const [insertOneLinkDd] = useMutation(INSERT_ONE_LINK_DD, {
-    refetchQueries: [{ query: GET_LINKS }],
-    errorPolicy: 'all'
+    errorPolicy: "all",
   });
 
-
-
-  const { register, control, handleSubmit, formState: { errors }, reset ,watch} = useForm({
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
     defaultValues: {
       links: data?.links || [],
     },
@@ -42,30 +53,43 @@ const CustomizeLinks = () => {
 
   const { fields, append, remove, move } = useFieldArray({
     control,
-    name: 'links',
+    name: "links",
   });
 
   useEffect(() => {
     if (data && data.links) {
       reset({ links: data.links });
-      console.log("fields: ",fields);
+      console.log("fields: ", fields);
     }
   }, [data]);
 
   const onSubmit: SubmitHandler<any> = async (Data) => {
     console.log("------------------>|||||", Data);
-    console.log("platform", platforms);
     try {
+      console.log("*-*", arrayIds);
+      if (arrayIds.length > 0) {
+        arrayIds.forEach(async (id) => await deleteLink({ variables: { id } }));
+        arrayIds = [];
+      }
       console.log("--++--", dataProfile.profile);
       for (let i: number = 0; i < Data.links.length; i++) {
-        console.log("profile_id:", dataProfile.profile[0].id, " platform_name:", Data.links[i].platform_name, " link:", Data.links[i].link);
-        await insertOneLink({ 
-           variables: {platform_name: Data.links[i].platform_name, link: Data.links[i].link,profile_id: dataProfile.profile[0].id} 
+        console.log(
+          "profile_id:",
+          dataProfile.profile[0].id,
+          " platform_name:",
+          Data.links[i].platform_name,
+          " link:",
+          Data.links[i].link
+        );
+        await insertOneLink({
+          variables: {
+            platform_name: Data.links[i].platform_name,
+            link: Data.links[i].link,
+            profile_id: dataProfile.profile[0].id,
+          },
         });
-
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
     // ******************
@@ -74,84 +98,81 @@ const CustomizeLinks = () => {
     console.log("show links", data.links);
     data.links.map((link) => {
       console.log(link.platform_name, link.link);
-    })
-    console.log("------------------->||||")
+    });
+    console.log("------------------->||||");
   };
 
-  // const handlePlatforms = (platform: string, index: number) => {
-  //   setPlatforms((prevPlatforms) => {
-  //     const newPlatforms = [...prevPlatforms];
-  //     if (index >= 0 && index < newPlatforms.length) {
-  //       newPlatforms[index] = platform;
-  //     } else if (index === newPlatforms.length) {
-  //       newPlatforms.push(platform);
-  //     }
-  //     console.log("pppppppppppppp", newPlatforms);
-  //     return newPlatforms;
-  //   });
-  // };
-
   const handleRemove = async (idx: number, id: number) => {
-
-    console.log("hereeeeee", id, idx);
+    console.log("hereeeeee", id, idx, fields);
     try {
-
-      if (id)
-        await deleteLink({ variables: { id } });
+      if (id) arrayIds.push(id);
+      // await deleteLink({ variables: { id } });
       remove(idx);
-    }
-    catch (error) {
+      let copyData = JSON.parse(JSON.stringify(data));
+      const filteredCopyData = {
+        ...copyData,
+        links: copyData.links.filter(link => link.id_ !== id)
+      };
+      setData(filteredCopyData);
+    } catch (error) {
       console.log(error);
     }
     console.log(id);
   };
 
+  useEffect(() => {
+    // if(data.links)
+    //   console.log("88",fields.length, data.links.length, changed);
+    if(data.links && fields.length !== data.links.length)
+    {
+      let copyData = {
+        ...data,
+        links: [...fields]
+      };
+      setData({...copyData});
+      return;
+    }
+    if (fields.length > 0 && !changed) {
+      console.log("***********>>>", fields, "-------------", data);
+      let copyData = JSON.parse(JSON.stringify(data));
+      for (let i: number = 0; i < fields.length; i++) {
+        console.log("waaaaaaaaaaaaaaa3");
+        copyData.links[i].platform_name = fields[i].platform_name;
+        copyData.links[i].link = fields[i].link;
+      }
+      setData({ ...copyData });
+    }
+    setChanged((prev) => !prev);
+  }, [fields]);
+
   const handleDrag = async ({ source, destination }) => {
     if (destination) {
-      console.log("souce", source, "destionation", destination, fields);
+      // console.log("souce", source, "destionation", destination, fields);
       move(source.index, destination.index);
-      console.log("souce", source, "destionation", destination, fields);
-      try {
-        const copyField = fields[source.index];
-        console.log("dragggg",fields[source.index]);
-        fields[source.index] = fields[destination.index];
-        fields[destination.index] = copyField;
-        console.log("length: ",fields);
-        // await deletelinks();
-        // for (let i: number = 0; i < fields.length; i++) {
-        //   console.log("length: ",fields.length);
-        //   console.log("P:", fields[i].platform_name, "L", fields[i].link);
-        //   if(!fields[i].platform_name || !fields[i].link)
-        //     continue;
-        //   console.log("hhere");
-        //   // await Addlinks({ variables: { profile_id: dataProfile.profile[0].id, platform_name: fields[i].platform_name, link: fields[i].link } })
-        //   await insertOneLinkDd({ 
-        //     variables: {platform_name: fields[i].platform_name, link: fields[i].link,profile_id: dataProfile.profile[0].id} 
-        //  });
-        // }
-        // setPlatforms([]);
-        // reset({ links: fields });
-      }
-      catch (error) {
-        console.log(error);
-      }
     }
   };
 
-
   return (
     <div className="relative bg-white rounded-xl w-full max-h-[calc(100vh-150px)] max-w-full flex flex-col">
-      <form className="flex flex-col justify-between h-full" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col justify-between h-full"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="px-10 overflow-auto">
-          <div className="font-bold text-3xl mb-5 mt-20">Customize your links</div>
+          <div className="font-bold text-3xl mb-5 mt-20">
+            Customize your links
+          </div>
           <div className="text-sm mb-10">
-            Add/edit/remove links below and then share all your profiles with the world!
+            Add/edit/remove links below and then share all your profiles with
+            the world!
           </div>
           <div className="overflow-y-auto no-scrollbar">
             <ButtonS
               icon={<FaPlus />}
               text="Add new link"
-              handleClick={() => append({ id: null, platform_name: '', link: '' })}
+              handleClick={() =>
+                append({ id: null, platform_name: "Github", link: "" })
+              }
             />
           </div>
           <div className="pb-4">
@@ -160,8 +181,9 @@ const CustomizeLinks = () => {
                 <AddIcon />
                 <div className="text-3xl mt-5">Let’s get you started</div>
                 <div className="text-sm mt-5">
-                  Use the “Add new link” button to get started. Once you have more than one link, you can reorder and
-                  edit them. We’re here to help you share your profiles with everyone!
+                  Use the “Add new link” button to get started. Once you have
+                  more than one link, you can reorder and edit them. We’re here
+                  to help you share your profiles with everyone!
                 </div>
               </div>
             ) : (
@@ -172,7 +194,7 @@ const CustomizeLinks = () => {
                       {fields.map((field, idx) => {
                         return (
                           <Draggable
-                            key={`links[${idx}]`}
+                            key={field.id}
                             draggableId={`item-${idx}`}
                             index={idx}
                           >
@@ -182,14 +204,18 @@ const CustomizeLinks = () => {
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
-
                               >
                                 <div className="flex justify-between text-md mb-3">
                                   <div className="flex items-center justify-center gap-2">
                                     <MdOutlineDragHandle />
-                                    <div className="font-bold">Link #{idx + 1}</div>
+                                    <div className="font-bold">
+                                      Link #{idx + 1}
+                                    </div>
                                   </div>
-                                  <button type="button" onClick={() => handleRemove(idx, field.id_)}>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemove(idx, field.id_)}
+                                  >
                                     Remove
                                   </button>
                                 </div>
@@ -199,7 +225,7 @@ const CustomizeLinks = () => {
                                     <Controller
                                       name={`links.${idx}.platform_name`}
                                       control={control}
-                                      defaultValue={field.platform_name}
+                                      // defaultValue={field.platform_name}
                                       render={({ field }) => (
                                         <Dropdown
                                           value={field.value}
@@ -241,7 +267,7 @@ const CustomizeLinks = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default CustomizeLinks
+export default CustomizeLinks;
