@@ -11,17 +11,20 @@ import { useEffect, useState } from "react";
 
 
 function App() {
-  const { data } = useQuery(GET_LINKS);
+  const { data, loading, error } = useQuery(GET_LINKS);
   const { data: dataProfile } = useQuery(GET_PROFILES);
   const [copyData,setCopyData] = useState({...data});
   const [changed, setChanged] = useState<boolean>(false);
   // const copyData = { ...data };
   
   
-  useEffect(()=>{
-    setCopyData({...data})
-  },[data])
-  
+  // useEffect(()=>{
+  //   setCopyData({...data})
+  // },[data])
+  if(loading)
+    return <div>loading</div>;
+  if(error)
+    return <div>error</div>;
   // useEffect(()=>{
   //   console.log("from parent component",copyData);
   // },[copyData])
@@ -40,7 +43,7 @@ function App() {
           </div>
           <div className="flex flex-row gap-5 w-full h-full mb-5">
             <Phone data={copyData} />
-            <CustomizeLinks data={copyData} setData={setCopyData} changed={changed} setChanged={setChanged}/>
+            <CustomizeLinks data={data} setData={setCopyData} />
           </div>
         </div>
       </div>

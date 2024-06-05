@@ -1,8 +1,18 @@
 import Nav from './components/Nav'
 import Phone from './components/Phone'
 import CustomizeProfile from './components/CustomizeProfile'
+import { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_LINKS } from './graphql/queries';
 
 const Profile = () => {
+  const { data } = useQuery(GET_LINKS);
+  const [copyData,setCopyData] = useState({...data});
+
+  // useEffect(()=>{
+  //   setCopyData({...data})
+  // },[data])
+
     return (
         <>
         <div className="bg-[#FAFAFA]">
@@ -14,7 +24,7 @@ const Profile = () => {
           </div>
           <div className="flex flex-row gap-5 w-full h-full mb-5">
     
-          <Phone />
+          <Phone  data={copyData}  />
           <CustomizeProfile />
           </div>
         </div>

@@ -1,7 +1,7 @@
 import Button from "./Button";
 import { FaPlus } from "react-icons/fa6";
 import AddIcon from "./AddIcon";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
 import Input from "./Input";
 import ButtonS from "./ButtonS";
@@ -22,13 +22,12 @@ import {
   DELETE_LINK,
   DELETE_LINKS,
   INSERT_ONE_LINK,
-  INSERT_ONE_LINK_DD,
 } from "../graphql/mutations";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 let arrayIds: number[] = [];
 
-const CustomizeLinks = ({ data, setData, changed, setChanged }: any) => {
+const CustomizeLinks = memo(({ data, setData}: any) => {
   // const { loading, error, data } = useQuery(GET_LINKS);
   const { data: dataProfile } = useQuery(GET_PROFILES);
   const [deleteLink] = useMutation(DELETE_LINK, {
@@ -45,6 +44,7 @@ const CustomizeLinks = ({ data, setData, changed, setChanged }: any) => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm({
     defaultValues: {
       links: data?.links || [],
@@ -56,12 +56,25 @@ const CustomizeLinks = ({ data, setData, changed, setChanged }: any) => {
     name: "links",
   });
 
+  const watchedFields = watch('links');
+
+  
   useEffect(() => {
-    if (data && data.links) {
-      reset({ links: data.links });
-      console.log("fields: ", fields);
-    }
-  }, [data]);
+    console.log('Fields changed:', watchedFields);
+
+    const filteredCopyData = {
+      ...data,
+      links: watchedFields,
+    };
+    setData(filteredCopyData);
+  });
+
+  // useEffect(() => {
+  //   if (data && data.links) {
+  //     reset({ links: data.links });
+  //     console.log("fields: ", fields);
+  //   }
+  // }, [data]);
 
   const onSubmit: SubmitHandler<any> = async (Data) => {
     console.log("------------------>|||||", Data);
@@ -104,46 +117,54 @@ const CustomizeLinks = ({ data, setData, changed, setChanged }: any) => {
 
   const handleRemove = async (idx: number, id: number) => {
     console.log("hereeeeee", id, idx, fields);
-    try {
-      if (id) arrayIds.push(id);
-      // await deleteLink({ variables: { id } });
-      remove(idx);
-      let copyData = JSON.parse(JSON.stringify(data));
-      const filteredCopyData = {
-        ...copyData,
-        links: copyData.links.filter(link => link.id_ !== id)
-      };
-      setData(filteredCopyData);
-    } catch (error) {
-      console.log(error);
-    }
-    console.log(id);
+    if (id) arrayIds.push(id);
+    remove(idx);
+    // try {
+    //   // await deleteLink({ variables: { id } });
+    //   let copyData = JSON.parse(JSON.stringify(data));
+    //   const filteredCopyData = {
+    //     ...copyData,
+    //     links: copyData.links.filter(link => link.id_ !== id)
+    //   };
+    //   // setData(filteredCopyData);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    // console.log(id);
   };
 
-  useEffect(() => {
-    // if(data.links)
-    //   console.log("88",fields.length, data.links.length, changed);
-    if(data.links && fields.length !== data.links.length)
-    {
-      let copyData = {
-        ...data,
-        links: [...fields]
-      };
-      setData({...copyData});
-      return;
-    }
-    if (fields.length > 0 && !changed) {
-      console.log("***********>>>", fields, "-------------", data);
-      let copyData = JSON.parse(JSON.stringify(data));
-      for (let i: number = 0; i < fields.length; i++) {
-        console.log("waaaaaaaaaaaaaaa3");
-        copyData.links[i].platform_name = fields[i].platform_name;
-        copyData.links[i].link = fields[i].link;
-      }
-      setData({ ...copyData });
-    }
-    setChanged((prev) => !prev);
-  }, [fields]);
+  // useEffect(() => {
+  //   // if(data.links)
+  //   //   console.log("88",fields.length, data.links.length, changed);
+  //   if(data.links && fields.length !== data.links.length)
+  //   {
+  //     let copyData = {
+  //       ...data,
+  //       links: [...fields]
+  //     };
+  //     // setData({...copyData});
+  //     return;
+  //   }
+  //   if (fields.length > 0) {
+  //     console.log("***********>>>", fields, "-------------", data);
+  //     let copyData = JSON.parse(JSON.stringify(data));
+  //     for (let i: number = 0; i < fields.length; i++) {
+  //       console.log("waaaaaaaaaaaaaaa3");
+  //       copyData.links[i].platform_name = fields[i].platform_name;
+  //       copyData.links[i].link = fields[i].link;
+  //     }
+  //     // setData({ ...copyData });
+  //   }
+  //   // setChanged((prev) => !prev);
+  // }, [fields]);
+
+  // useEffect(()=>{
+  //   const filteredCopyData = {
+  //     ...data,
+  //     links: watchedFields,
+  //   };
+  //   setData(filteredCopyData);
+  // },[fields]);
 
   const handleDrag = async ({ source, destination }) => {
     if (destination) {
@@ -194,12 +215,13 @@ const CustomizeLinks = ({ data, setData, changed, setChanged }: any) => {
                       {fields.map((field, idx) => {
                         return (
                           <Draggable
-                            key={field.id}
+                            key={`links[${idx}]`}
                             draggableId={`item-${idx}`}
                             index={idx}
                           >
                             {(provided, snapshot) => (
                               <li
+                                key={field.id}
                                 className="w-full bg-gray-100 p-5 rounded-xl mt-5"
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
@@ -268,6 +290,6 @@ const CustomizeLinks = ({ data, setData, changed, setChanged }: any) => {
       </form>
     </div>
   );
-};
+});
 
 export default CustomizeLinks;
