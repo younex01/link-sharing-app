@@ -12,6 +12,22 @@ query get_profiles {
 }
 `;
 
+export const GET_PROFILE = gql`
+query GetProfile($id: Int!) {
+  profile_by_pk(id: $id) {
+    id
+    avatar
+    email
+    first_name
+    last_name
+    links {
+      link
+      platform_name
+      id_
+    }
+  }
+}
+`;
 
 export const GET_LINKS = gql`
 query get_links {

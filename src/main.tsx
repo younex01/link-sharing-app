@@ -15,6 +15,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Auth0Provider } from '@auth0/auth0-react';
 import ProtectedRoutes from './ProtectedRoutes.tsx';
 import { AuthenticationGuard } from './authentication-guard.tsx';
+import PreviewLive from './PreviewLive.tsx';
 
 
 const client = new ApolloClient({
@@ -42,6 +43,11 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <AuthenticationGuard component={Profile} />
+  },
+  {
+    path: "/preview/:id",
+    element: <PreviewLive />,
+    errorElement: <ErrorPage />,
   },
 ]);
 

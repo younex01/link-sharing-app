@@ -10,24 +10,6 @@ import { useQuery } from "@apollo/client";
 import { GET_LINKS, GET_PROFILES } from "./graphql/queries";
 
 
-const User = {
-  links : [ 
-    {
-    icon: <FaYoutube />,
-    text: "YouTube",
-    color: "#EE3939", link: "https://www.youtube.com"
-  },
-  { icon: <PiGithubLogoFill />, text: "GitHub", color: "#1A1A1A", link: "https://www.github.com"  },
-  { icon: <IoLogoLinkedin />, text: "LinkedIn", color: "#2D68FF" , link: "https://www.linkedin.com" },
-],
-  Profile : {
-      imgUrl: "",
-      first_name: "Ben",
-      last_name: "Wright",
-      email: "ben@example.com",
-    }
-  };
-
   const platforms = [
     {
       icon: <FaYoutube />,
