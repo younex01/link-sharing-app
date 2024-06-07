@@ -28,7 +28,6 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 let arrayIds: number[] = [];
 
 const CustomizeLinks = memo(({ data, setData}: any) => {
-  // const { loading, error, data } = useQuery(GET_LINKS);
   const { data: dataProfile } = useQuery(GET_PROFILES);
   const [deleteLink] = useMutation(DELETE_LINK, {
     refetchQueries: [{ query: GET_LINKS }],
@@ -43,7 +42,6 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
     control,
     handleSubmit,
     formState: { errors },
-    reset,
     watch,
   } = useForm({
     defaultValues: {
@@ -68,13 +66,6 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
     };
     setData(filteredCopyData);
   });
-
-  // useEffect(() => {
-  //   if (data && data.links) {
-  //     reset({ links: data.links });
-  //     console.log("fields: ", fields);
-  //   }
-  // }, [data]);
 
   const onSubmit: SubmitHandler<any> = async (Data) => {
     console.log("------------------>|||||", Data);
@@ -105,70 +96,15 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
     } catch (error) {
       console.log(error);
     }
-    // ******************
-
-    console.log("******************");
-    console.log("show links", data.links);
-    data.links.map((link) => {
-      console.log(link.platform_name, link.link);
-    });
-    console.log("------------------->||||");
   };
 
   const handleRemove = async (idx: number, id: number) => {
-    console.log("hereeeeee", id, idx, fields);
     if (id) arrayIds.push(id);
     remove(idx);
-    // try {
-    //   // await deleteLink({ variables: { id } });
-    //   let copyData = JSON.parse(JSON.stringify(data));
-    //   const filteredCopyData = {
-    //     ...copyData,
-    //     links: copyData.links.filter(link => link.id_ !== id)
-    //   };
-    //   // setData(filteredCopyData);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // console.log(id);
   };
-
-  // useEffect(() => {
-  //   // if(data.links)
-  //   //   console.log("88",fields.length, data.links.length, changed);
-  //   if(data.links && fields.length !== data.links.length)
-  //   {
-  //     let copyData = {
-  //       ...data,
-  //       links: [...fields]
-  //     };
-  //     // setData({...copyData});
-  //     return;
-  //   }
-  //   if (fields.length > 0) {
-  //     console.log("***********>>>", fields, "-------------", data);
-  //     let copyData = JSON.parse(JSON.stringify(data));
-  //     for (let i: number = 0; i < fields.length; i++) {
-  //       console.log("waaaaaaaaaaaaaaa3");
-  //       copyData.links[i].platform_name = fields[i].platform_name;
-  //       copyData.links[i].link = fields[i].link;
-  //     }
-  //     // setData({ ...copyData });
-  //   }
-  //   // setChanged((prev) => !prev);
-  // }, [fields]);
-
-  // useEffect(()=>{
-  //   const filteredCopyData = {
-  //     ...data,
-  //     links: watchedFields,
-  //   };
-  //   setData(filteredCopyData);
-  // },[fields]);
 
   const handleDrag = async ({ source, destination }) => {
     if (destination) {
-      // console.log("souce", source, "destionation", destination, fields);
       move(source.index, destination.index);
     }
   };
@@ -263,6 +199,7 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
                                       placeholder="e.g. https://www.website.com/johnappleseed"
                                       type="text"
                                       register={register(`links.${idx}.link`)}
+                                      error={errors.link} errorMessage={errors.link?.message}
                                     />
                                   </div>
                                 </div>
