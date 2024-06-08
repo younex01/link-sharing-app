@@ -17,12 +17,12 @@ const Profile = () => {
         <>
         <div className="bg-[#FAFAFA]">
     
-        <div className=" h-screen flex flex-col items-center gap-5 mx-10 ">
+        <div className=" h-screen  flex flex-col items-center gap-5 sm:mx-[24px]">
           <div className="w-full ">
     
           <Nav/>
           </div>
-          <div className="flex flex-row gap-5 w-full h-full mb-5">
+          <div className="flex flex-row gap-5  mb-5 mx-[16px] sm:mx-[24px] relative">
           <Phone  data={copyData}  />
           <CustomizeProfile />
           </div>

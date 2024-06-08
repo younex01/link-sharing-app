@@ -37,8 +37,8 @@ const Preview = () => {
 
     //  {/* ---------- */}
 
-    <div className="relative bg-gray-100 h-screen">
-      <div className="h-[357px] w-full bg-blue rounded-b-3xl p-5">
+    <div className="relative bg-white sm:bg-gray-100 h-screen">
+      <div className="h-[357px] w-full sm:bg-blue rounded-b-3xl p-5">
         <div className="h-[78px] w-full bg-white rounded-xl p-2 flex justify-between items-center">
           <div className="w-[163px] pl-[24px] py-[16px]">
             <Link to="/">

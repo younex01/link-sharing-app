@@ -116,10 +116,10 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="px-10 overflow-auto">
-          <div className="font-bold text-3xl mb-5 mt-20">
+          <div className="font-bold text-[24px] sm:text-[32px] mb-5 mt-20">
             Customize your links
           </div>
-          <div className="text-sm mb-10">
+          <div className="text-[16px] mb-10 text-[#737373]">
             Add/edit/remove links below and then share all your profiles with
             the world!
           </div>
@@ -137,7 +137,7 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
               <div className="bg-gray-100 rounded-xl max-w-full p-12 flex flex-col items-center mt-5">
                 <AddIcon />
                 <div className="text-3xl mt-5">Let’s get you started</div>
-                <div className="text-sm mt-5">
+                <div className="text-sm mt-5 text-[#737373]">
                   Use the “Add new link” button to get started. Once you have
                   more than one link, you can reorder and edit them. We’re here
                   to help you share your profiles with everyone!
@@ -165,12 +165,13 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
                               >
                                 <div className="flex justify-between text-md mb-3">
                                   <div className="flex items-center justify-center gap-2">
-                                    <MdOutlineDragHandle />
-                                    <div className="font-bold">
+                                    <MdOutlineDragHandle className="text-[#737373]"/>
+                                    <div className="font-bold text-[#737373] text-[16px]">
                                       Link #{idx + 1}
                                     </div>
                                   </div>
                                   <button
+                                    className="text-[#737373] text-[16px]"
                                     type="button"
                                     onClick={() => handleRemove(idx, field.id_)}
                                   >
@@ -179,7 +180,7 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
                                 </div>
                                 <div className="">
                                   <div className="mb-3">
-                                    <div className="text-sm">Platform</div>
+                                    <div className="text-[12px] text-[#333333]">Platform</div>
                                     <Controller
                                       name={`links.${idx}.platform_name`}
                                       control={control}
@@ -193,7 +194,7 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
                                     />
                                   </div>
                                   <div>
-                                    <div>Link</div>
+                                    <div className="text-[12px]">Link</div>
                                     <Input
                                       value={field.link}
                                       placeholder="e.g. https://www.website.com/johnappleseed"
