@@ -38,21 +38,21 @@ const Preview = () => {
     //  {/* ---------- */}
 
     <div className="relative bg-white sm:bg-gray-100 h-screen">
-      <div className="h-[357px] w-full sm:bg-blue rounded-b-3xl p-5">
-        <div className="h-[78px] w-full bg-white rounded-xl p-2 flex justify-between items-center">
-          <div className="w-[163px] pl-[24px] py-[16px]">
+      <div className="sm:h-[357px] w-full sm:bg-blue rounded-b-3xl sm:p-5">
+        <div className="sm:h-[78px] w-full bg-white rounded-xl flex justify-between items-center border-2 border-red px-[24px] py-[16px]">
+          <div className="w-[159.5px] sm:w-[163px] h-[46px] sm:pl-[24px] sm:py-[16px]">
             <Link to="/">
               <ButtonS text="Back to Editor" />
             </Link>
           </div>
-          <div className="w-[135px] pr-[16px] py-[16px]">
+          <div className="w-[159.5px] sm:w-[163px] h-[46px] sm:pr-[16px] sm:py-[16px]">
             <ButtonP text="Share Link" />
           </div>
         </div>
       </div>
       <div className="flex justify-center ">
-        <div className="absolute top-1/4 w-[349px] min-h-[569px] bg-white rounded-3xl ">
-          <div className="relative flex justify-center flex-col items-center w-full h-full  border-black border-2  pt-[48px] px-[56px]">
+        <div className="sm:absolute top-1/4 w-[349px] min-h-[569px] bg-white rounded-3xl ">
+          <div className="relative flex justify-center flex-col items-center w-full h-full   pt-[48px] px-[56px]">
             <div className="w-[237px] flex justify-center flex-col items-center border-red border-2">
             <div className="h-[104px] w-[104px] rounded-full bg-blue border-4 border-blue">
               {dataProfile.profile ? (

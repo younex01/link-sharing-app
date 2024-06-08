@@ -15,14 +15,14 @@ const Profile = () => {
 
     return (
         <>
-        <div className="bg-[#FAFAFA]">
+        <div className="bg-[#FAFAFA] ">
     
-        <div className=" h-screen  flex flex-col items-center gap-5 sm:mx-[24px]">
+        <div className=" h-screen  flex flex-col items-center sm:gap-5 sm:mx-[24px]">
           <div className="w-full ">
     
           <Nav/>
           </div>
-          <div className="flex flex-row gap-5  mb-5 mx-[16px] sm:mx-[24px] relative">
+          <div className="bg-[#FAFAFA] flex flex-row gap-5 p-[16px] sm:mx-[24px]  border-red border-2">
           <Phone  data={copyData}  />
           <CustomizeProfile />
           </div>

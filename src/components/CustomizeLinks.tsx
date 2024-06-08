@@ -110,9 +110,9 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
   };
 
   return (
-    <div className="relative bg-white rounded-xl w-full max-h-[calc(100vh-150px)] max-w-full flex flex-col">
+    <div className="relative bg-white rounded-xl w-full max-h-[calc(100vh-120px)] max-w-full flex flex-col">
       <form
-        className="flex flex-col justify-between h-full"
+        className="flex flex-col justify-between h-full rounded-xl border-black border-2"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="px-10 overflow-auto">
@@ -217,13 +217,14 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
             )}
           </div>
         </div>
-        <div className="bg-white h-[100px] w-full p-5 flex justify-end border-t-2 border-[#D9D9D9]">
-          <button
+        <div className="bg-white h-[100px] w-full p-5 flex justify-end border-t-2 border-[#D9D9D9] ">
+          {/* <button
             type="submit"
             className="flex justify-center items-center gap-2 py-2.5 px-5 me-2 mb-2 text-sm font-medium focus:outline-none rounded-lg border border-gray-200 hover:bg-[#EFEBFF] hover:text-[#633CFF] focus:z-10 focus:ring-4 focus:ring-gray-100 text-[white] border-[#633CFF] bg-[#633CFF] hover:bg-[#4b31b5] hover:text-white"
           >
             Save
-          </button>
+          </button> */}
+          <ButtonP text="Save"/>
         </div>
       </form>
     </div>

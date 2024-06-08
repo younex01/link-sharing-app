@@ -37,7 +37,7 @@ const Phone = ({data}:any) => {
   console.log("from Phone", dataProfile);
 
   return (
-    <div className="hidden md:flex bg-white rounded-xl w-2/3 flex justify-center items-center">
+    <div className="hidden md:flex bg-white rounded-xl w-2/3  justify-center items-center">
       <div className="relative flex justify-center items-center">
         {dataProfile && dataProfile.profile ? (
           <>

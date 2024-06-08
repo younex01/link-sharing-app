@@ -41,7 +41,7 @@ function App() {
           <div className="w-full ">
             <Nav />
           </div>
-          <div className="flex flex-row gap-5  mb-5 mx-[16px] sm:mx-[24px]">
+          <div className="bg-[#FAFAFA] flex flex-row mx-[16px] sm:mx-[24px]">
             <Phone data={copyData} />
             <CustomizeLinks data={data} setData={setCopyData} />
           </div>
