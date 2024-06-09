@@ -27,7 +27,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 let arrayIds: number[] = [];
 
-const CustomizeLinks = memo(({ data, setData}: any) => {
+const CustomizeLinks = memo(({ data, setData }: any) => {
   const { data: dataProfile } = useQuery(GET_PROFILES);
   const [deleteLink] = useMutation(DELETE_LINK, {
     refetchQueries: [{ query: GET_LINKS }],
@@ -54,11 +54,10 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
     name: "links",
   });
 
-  const watchedFields = watch('links');
+  const watchedFields = watch("links");
 
-  
   useEffect(() => {
-    console.log('Fields changed:', watchedFields);
+    console.log("Fields changed:", watchedFields);
 
     const filteredCopyData = {
       ...data,
@@ -110,13 +109,13 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
   };
 
   return (
-    <div className="relative bg-white rounded-xl w-full max-h-[calc(100vh-120px)] max-w-full flex flex-col">
+    <div className="relative bg-white rounded-xl w-full max-h-[calc(100vh-120px)] max-w-full flex flex-col px-[24px] pt-[24px] sm:px-[40px] sm:pt-[40px]">
       <form
-        className="flex flex-col justify-between h-full rounded-xl border-black border-2"
+        className="flex flex-col justify-between h-full rounded-xl"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="px-10 overflow-auto">
-          <div className="font-bold text-[24px] sm:text-[32px] mb-5 mt-20">
+        <div className=" overflow-auto">
+          <div className="font-bold text-[24px] sm:text-[32px] mb-5 ">
             Customize your links
           </div>
           <div className="text-[16px] mb-10 text-[#737373]">
@@ -165,7 +164,7 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
                               >
                                 <div className="flex justify-between text-md mb-3">
                                   <div className="flex items-center justify-center gap-2">
-                                    <MdOutlineDragHandle className="text-[#737373]"/>
+                                    <MdOutlineDragHandle className="text-[#737373]" />
                                     <div className="font-bold text-[#737373] text-[16px]">
                                       Link #{idx + 1}
                                     </div>
@@ -180,7 +179,9 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
                                 </div>
                                 <div className="">
                                   <div className="mb-3">
-                                    <div className="text-[12px] text-[#333333]">Platform</div>
+                                    <div className="text-[12px] text-[#333333]">
+                                      Platform
+                                    </div>
                                     <Controller
                                       name={`links.${idx}.platform_name`}
                                       control={control}
@@ -200,7 +201,8 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
                                       placeholder="e.g. https://www.website.com/johnappleseed"
                                       type="text"
                                       register={register(`links.${idx}.link`)}
-                                      error={errors.link} errorMessage={errors.link?.message}
+                                      error={errors.link}
+                                      errorMessage={errors.link?.message}
                                     />
                                   </div>
                                 </div>
@@ -217,14 +219,16 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
             )}
           </div>
         </div>
-        <div className="bg-white h-[100px] w-full p-5 flex justify-end border-t-2 border-[#D9D9D9] ">
+        <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute inset-x-0 bottom-0  sm:flex">
           {/* <button
             type="submit"
             className="flex justify-center items-center gap-2 py-2.5 px-5 me-2 mb-2 text-sm font-medium focus:outline-none rounded-lg border border-gray-200 hover:bg-[#EFEBFF] hover:text-[#633CFF] focus:z-10 focus:ring-4 focus:ring-gray-100 text-[white] border-[#633CFF] bg-[#633CFF] hover:bg-[#4b31b5] hover:text-white"
           >
             Save
           </button> */}
-          <ButtonP text="Save"/>
+          <div className="sm:w-[96px]">
+            <ButtonP text="Save" />
+          </div>
         </div>
       </form>
     </div>

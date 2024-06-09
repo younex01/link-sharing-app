@@ -22,7 +22,7 @@ const Profile = () => {
     
           <Nav/>
           </div>
-          <div className="bg-[#FAFAFA] flex flex-row gap-5 p-[16px] sm:mx-[24px]  border-red border-2">
+          <div className="bg-[#FAFAFA] h-full w-full flex flex-row gap-5 p-[16px] sm:p-0 sm:mx-[24px]  border-red border-2">
           <Phone  data={copyData}  />
           <CustomizeProfile />
           </div>

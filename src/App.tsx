@@ -37,11 +37,11 @@ function App() {
   return (
     <>
     <div className="bg-[#FAFAFA]">
-        <div className=" h-screen overflow-hidden flex flex-col items-center gap-5 sm:mx-[24px]">
+        <div className=" h-screen overflow-hidden flex flex-col items-center sm:gap-5 sm:mx-[24px]">
           <div className="w-full ">
             <Nav />
           </div>
-          <div className="bg-[#FAFAFA] flex flex-row mx-[16px] sm:mx-[24px]">
+          <div className="bg-[#FAFAFA] w-full h-full flex flex-row gap-5 p-[16px] sm:p-0 sm:mx-[24px]">
             <Phone data={copyData} />
             <CustomizeLinks data={data} setData={setCopyData} />
           </div>
