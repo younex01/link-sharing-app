@@ -34,7 +34,7 @@ const Nav = (props: NavType) => {
   }, []);
 
   return (
-    <div className="bg-white rounded-xl sm:mt-5 w-full p-5 h-fit ">
+    <div className="bg-white  rounded-xl w-full p-5 h-fit ">
       <div className="h-[42px] sm:h-[46px] flex justify-between items-center text-center my-auto">
 
       <div className="h-[42px] sm:h-[46px] flex  item-center pt-1">

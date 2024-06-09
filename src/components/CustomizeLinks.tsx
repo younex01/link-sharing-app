@@ -109,16 +109,16 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
   };
 
   return (
-    <div className="relative bg-white rounded-xl w-full max-h-[calc(100vh-120px)] max-w-full flex flex-col px-[24px] pt-[24px] sm:px-[40px] sm:pt-[40px]">
+    <div className="relative bg-white rounded-xl  h-full sm:h-[calc(100vh-154px)]  flex flex-col border-2 w-full border-black px-[24px] pt-[24px] sm:px-[40px] sm:pt-[40px]">
       <form
         className="flex flex-col justify-between h-full rounded-xl"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className=" overflow-auto">
+        <div className=" overflow-auto sm:mb-[83px]">
           <div className="font-bold text-[24px] sm:text-[32px] mb-5 ">
             Customize your links
           </div>
-          <div className="text-[16px] mb-10 text-[#737373]">
+          <div className="text-[16px] mb-[40px] text-[#737373]">
             Add/edit/remove links below and then share all your profiles with
             the world!
           </div>
@@ -131,7 +131,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
               }
             />
           </div>
-          <div className="pb-4">
+          <div className="">
             {fields.length === 0 ? (
               <div className="bg-gray-100 rounded-xl max-w-full p-12 flex flex-col items-center mt-5">
                 <AddIcon />
@@ -157,7 +157,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                             {(provided, snapshot) => (
                               <li
                                 key={field.id}
-                                className="w-full bg-gray-100 p-5 rounded-xl mt-5"
+                                className="w-full bg-gray-100 p-5 rounded-xl mt-[24px]"
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
@@ -220,12 +220,6 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
           </div>
         </div>
         <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute inset-x-0 bottom-0  sm:flex">
-          {/* <button
-            type="submit"
-            className="flex justify-center items-center gap-2 py-2.5 px-5 me-2 mb-2 text-sm font-medium focus:outline-none rounded-lg border border-gray-200 hover:bg-[#EFEBFF] hover:text-[#633CFF] focus:z-10 focus:ring-4 focus:ring-gray-100 text-[white] border-[#633CFF] bg-[#633CFF] hover:bg-[#4b31b5] hover:text-white"
-          >
-            Save
-          </button> */}
           <div className="sm:w-[96px]">
             <ButtonP text="Save" />
           </div>
