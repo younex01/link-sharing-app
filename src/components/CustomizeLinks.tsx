@@ -53,7 +53,6 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
 
   const mySchema = z.object({
     links: z.array(z.object({
-    id_: z.number().positive(),
     platform_name: z.string().nonempty(), 
     link: z.string().min(1,{ message:"Can't be empty" }).url( "Please check the URL"),
   }).refine((data) =>
@@ -234,7 +233,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                                   </div>
                                   <div>
                                     <div className="text-[12px]">Link</div>
-                                    {(errors.links && errors.links[idx]) ? <Input
+                                    {(errors.links && errors.links[idx] && errors.links[idx]?.link && errors.links[idx]?.link.message) ? <Input
                                       value={field.link}
                                       placeholder="e.g. https://www.website.com/johnappleseed"
                                       type="text"
