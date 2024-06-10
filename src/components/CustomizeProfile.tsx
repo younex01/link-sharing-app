@@ -21,6 +21,7 @@ interface ProfileType {
 }
 
 const CustomizeProfile = () => {
+  
   const { loading, error, data } = useQuery(GET_PROFILES);
   const [addProfile] = useMutation(ADD_PROFILE, {
     refetchQueries: [{ query: GET_PROFILES }],

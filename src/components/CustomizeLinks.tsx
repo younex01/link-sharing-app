@@ -6,6 +6,7 @@ import Dropdown from "./Dropdown";
 import Input from "./Input";
 import ButtonS from "./ButtonS";
 import ButtonP from "./ButtonP";
+import { z } from "zod";
 import { Reorder } from "framer-motion";
 import { MdOutlineDragHandle } from "react-icons/md";
 import {
@@ -25,10 +26,14 @@ import {
 } from "../graphql/mutations";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Save from "./icons/Save";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 let arrayIds: number[] = [];
 
+
 const CustomizeLinks = memo(({ data, setData }: any) => {
+
+
   const [isSaved, setIsSaved] = useState(false);
   const { data: dataProfile } = useQuery(GET_PROFILES);
   const [deleteLink] = useMutation(DELETE_LINK, {
@@ -38,6 +43,31 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
     refetchQueries: [{ query: GET_LINKS }],
     errorPolicy: "all",
   });
+
+  // const mySchema = z.object({
+  //   link: z.string().min(1, { message: "Can’t be empty" }),
+  //   platform_name: z.string(),
+  // });
+
+  // type Links = z.infer<typeof mySchema>;
+
+  const mySchema = z.object({
+    links: z.array(z.object({
+    id_: z.number().positive(),
+    platform_name: z.string().nonempty(), 
+    link: z.string().min(1,{ message:"Can't be empty" }).url( "Please check the URL"),
+  }).refine((data) =>
+    (`${data.link ?? ""}`.includes(
+      (data.platform_name ?? "").toLowerCase()
+          )), {
+    message: "Please check the URL", // More specific message
+    path: ["link"], // Path of error
+  })
+)
+  })
+  
+  // const LinksArraySchema = z.array(mySchema);
+  type Links = z.infer<typeof mySchema>;
 
   const {
     register,
@@ -49,6 +79,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
     defaultValues: {
       links: data?.links || [],
     },
+    resolver: zodResolver(mySchema),
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -68,7 +99,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
     setData(filteredCopyData);
   });
 
-  const onSubmit: SubmitHandler<any> = async (Data) => {
+  const onSubmit: SubmitHandler<Links> = async (Data) => {
     console.log("------------------>|||||", Data);
     try {
       console.log("*-*", arrayIds);
@@ -152,6 +183,9 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                   {(provided, snapshot) => (
                     <ul {...provided.droppableProps} ref={provided.innerRef}>
                       {fields.map((field, idx) => {
+                        console.log("errrrroooorr", errors);
+                        if (errors.links && errors.links[idx])
+                          console.log("errrrroooorr-->", errors.links[idx]);
                         return (
                           <Draggable
                             key={`links[${idx}]`}
@@ -200,14 +234,24 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                                   </div>
                                   <div>
                                     <div className="text-[12px]">Link</div>
+                                    {(errors.links && errors.links[idx]) ? <Input
+                                      value={field.link}
+                                      placeholder="e.g. https://www.website.com/johnappleseed"
+                                      type="text"
+                                      register={register(`links.${idx}.link`)}
+                                      error={errors.links && errors.links[idx]}
+                                      errorMessage={errors.links && errors.links[idx]?.link.message}
+                                    />
+                                    :
                                     <Input
                                       value={field.link}
                                       placeholder="e.g. https://www.website.com/johnappleseed"
                                       type="text"
                                       register={register(`links.${idx}.link`)}
-                                      error={errors.link}
-                                      errorMessage={errors.link?.message}
+                                      error=""
+                                      errorMessage=""
                                     />
+                                  }
                                   </div>
                                 </div>
                               </li>
