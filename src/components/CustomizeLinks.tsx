@@ -1,5 +1,5 @@
 import Button from "./Button";
-import { FaPlus } from "react-icons/fa6";
+import { FaLink, FaPlus } from "react-icons/fa6";
 import AddIcon from "./AddIcon";
 import { memo, useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
@@ -24,10 +24,12 @@ import {
   INSERT_ONE_LINK,
 } from "../graphql/mutations";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import Save from "./icons/Save";
 
 let arrayIds: number[] = [];
 
 const CustomizeLinks = memo(({ data, setData }: any) => {
+  const [isSaved, setIsSaved] = useState(false);
   const { data: dataProfile } = useQuery(GET_PROFILES);
   const [deleteLink] = useMutation(DELETE_LINK, {
     refetchQueries: [{ query: GET_LINKS }],
@@ -92,6 +94,8 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
           },
         });
       }
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 2000);
     } catch (error) {
       console.log(error);
     }
@@ -109,7 +113,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
   };
 
   return (
-    <div className="relative bg-white rounded-xl  h-full sm:h-[calc(100vh-154px)]  flex flex-col border-2 w-full border-black px-[24px] pt-[24px] sm:px-[40px] sm:pt-[40px]">
+    <div className="relative bg-white rounded-xl  h-full sm:h-[calc(100vh-154px)]  flex flex-col  w-full px-[24px] pt-[24px] sm:px-[40px] sm:pt-[40px]">
       <form
         className="flex flex-col justify-between h-full rounded-xl"
         onSubmit={handleSubmit(onSubmit)}
@@ -222,6 +226,16 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
         <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute inset-x-0 bottom-0  sm:flex">
           <div className="sm:w-[96px]">
             <ButtonP text="Save" />
+          </div>
+          <div
+            className={`sm:max-w-[409px] w-full fixed bottom-[20px] left-1/2 -translate-x-1/2  text-center bg-[#333333] text-[#FAFAFA] text-[16px] px-[24px] py-[16px] transition-opacity duration-300 ease-in-out rounded-xl ${
+              isSaved ? "" : "opacity-0"
+            }`}
+          >
+            <div className="flex justify-center items-center gap-[8px]">
+              <Save />
+              Your changes have been successfully saved!
+            </div>
           </div>
         </div>
       </form>
