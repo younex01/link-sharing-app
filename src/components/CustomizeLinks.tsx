@@ -1,5 +1,4 @@
-import Button from "./Button";
-import { FaLink, FaPlus } from "react-icons/fa6";
+import {  FaPlus } from "react-icons/fa6";
 import AddIcon from "./AddIcon";
 import { memo, useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
@@ -7,7 +6,6 @@ import Input from "./Input";
 import ButtonS from "./ButtonS";
 import ButtonP from "./ButtonP";
 import { z } from "zod";
-import { Reorder } from "framer-motion";
 import { MdOutlineDragHandle } from "react-icons/md";
 import {
   useForm,
@@ -18,10 +16,7 @@ import {
 import { GET_LINKS, GET_PROFILES } from "../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  ADD_LINKS,
-  ADD_PROFILE,
   DELETE_LINK,
-  DELETE_LINKS,
   INSERT_ONE_LINK,
 } from "../graphql/mutations";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
@@ -44,13 +39,6 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
     errorPolicy: "all",
   });
 
-  // const mySchema = z.object({
-  //   link: z.string().min(1, { message: "Can’t be empty" }),
-  //   platform_name: z.string(),
-  // });
-
-  // type Links = z.infer<typeof mySchema>;
-
   const mySchema = z.object({
     links: z.array(z.object({
     platform_name: z.string().nonempty(), 
@@ -59,13 +47,12 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
     (`${data.link ?? ""}`.includes(
       (data.platform_name ?? "").toLowerCase()
           )), {
-    message: "Please check the URL", // More specific message
-    path: ["link"], // Path of error
+    message: "Please check the URL",
+    path: ["link"], 
   })
 )
   })
   
-  // const LinksArraySchema = z.array(mySchema);
   type Links = z.infer<typeof mySchema>;
 
   const {
@@ -89,8 +76,6 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
   const watchedFields = watch("links");
 
   useEffect(() => {
-    console.log("Fields changed:", watchedFields);
-
     const filteredCopyData = {
       ...data,
       links: watchedFields,
@@ -99,23 +84,12 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
   });
 
   const onSubmit: SubmitHandler<Links> = async (Data) => {
-    console.log("------------------>|||||", Data);
     try {
-      console.log("*-*", arrayIds);
       if (arrayIds.length > 0) {
         arrayIds.forEach(async (id) => await deleteLink({ variables: { id } }));
         arrayIds = [];
       }
-      console.log("--++--", dataProfile.profile);
       for (let i: number = 0; i < Data.links.length; i++) {
-        console.log(
-          "profile_id:",
-          dataProfile.profile[0].id,
-          " platform_name:",
-          Data.links[i].platform_name,
-          " link:",
-          Data.links[i].link
-        );
         await insertOneLink({
           variables: {
             platform_name: Data.links[i].platform_name,
@@ -182,9 +156,6 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                   {(provided, snapshot) => (
                     <ul {...provided.droppableProps} ref={provided.innerRef}>
                       {fields.map((field, idx) => {
-                        console.log("errrrroooorr", errors);
-                        if (errors.links && errors.links[idx])
-                          console.log("errrrroooorr-->", errors.links[idx]);
                         return (
                           <Draggable
                             key={`links[${idx}]`}

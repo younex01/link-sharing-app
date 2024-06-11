@@ -1,12 +1,9 @@
-import Button from "./Button";
-import { FaPlus } from "react-icons/fa6";
-import { FaRegImage } from "react-icons/fa6";
 import Input from "./Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ImageUpload from "./ImageUpload";
-import { DocumentNode, useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { GET_PROFILES } from "../graphql/queries";
 import { ADD_PROFILE } from "../graphql/mutations";
 import { UPDATE_PROFILE } from "../graphql/mutations";
@@ -45,10 +42,8 @@ const CustomizeProfile = () => {
   } = useForm<Profile>({ resolver: zodResolver(mySchema) });
 
   const onSubmit: SubmitHandler<ProfileType> = async (Data) => {
-    console.log("Data", Data);
     try {
       if (data.profile.length !== 0 && data.profile[0].id) {
-        console.log("updated");
         await updateProfile({
           variables: {
             id: data.profile[0].id,
@@ -59,7 +54,6 @@ const CustomizeProfile = () => {
           },
         });
       } else {
-        console.log("added");
         await addProfile({
           variables: {
             first_name: Data.first_name,
@@ -75,8 +69,6 @@ const CustomizeProfile = () => {
       console.log(error);
     }
   };
-
-  console.log("--->", data);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;

@@ -79,7 +79,8 @@ const PreviewLive = () => {
                         }}
                         className="w-full h-[44px] bg-white rounded-xl  mb-5 flex justify-center items-center text-white p-4"
                       >
-                        <div className="relative flex flex-row gap-3 items-center flex-grow">
+                        <a href={item ? item.link : ""} target="_blank" className="relative flex flex-row gap-3 items-center flex-grow">
+                        
                           {item
                             ? platforms.find(
                                 (platform) => platform.text === item.platform_name
@@ -89,7 +90,7 @@ const PreviewLive = () => {
                           <div className="absolute right-0 translate-y-0.5">
                             {item ? <ArrowRight /> : ""}
                           </div>
-                        </div>
+                        </a>
                       </div>
                     );
                   })}
