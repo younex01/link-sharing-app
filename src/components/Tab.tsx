@@ -1,6 +1,7 @@
 interface TabType {
-  activated: boolean;
+  activated: boolean | undefined;
   text: string;
+  icon: any;
 }
 const Tab = ({ activated, text, icon }: TabType) => {
   return (

@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
@@ -9,11 +8,8 @@ import {
 import ErrorPage from './error-page.tsx';
 import Preview from './Preview.tsx';
 import Profile from './Profile.tsx';
-import { store } from './state/store.ts';
-import { Provider } from 'react-redux';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Auth0Provider } from '@auth0/auth0-react';
-import ProtectedRoutes from './ProtectedRoutes.tsx';
 import { AuthenticationGuard } from './authentication-guard.tsx';
 import PreviewLive from './PreviewLive.tsx';
 
@@ -51,24 +47,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-// const router = createBrowserRouter([
-//   {
-//     path: '/',
-//     element:  <App />,
-//     errorElement: <ErrorPage />,
-//         children: [
-//           {
-//             path: "/preview",
-//             element: <Preview />
-//           },
-//           {
-//             path: "/profile",
-//             element: <Profile />
-//           },
-//         ],
-//   },
-// ]);
-console.log(clientId, domain);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 

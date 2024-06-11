@@ -1,6 +1,5 @@
 import { FaLink } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
-import Button from "./Button";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -10,12 +9,9 @@ import LogoOnly from "./LogoOnly";
 import Eye from "./icons/Eye";
 import ButtonS from "./ButtonS";
 
-interface NavType {
-  show: number;
-  setShow: React.Dispatch<React.SetStateAction<number>>;
-}
-const Nav = (props: NavType) => {
-  const [clickedLink, setClickedLink] = useState<boolean>();
+
+const Nav = () => {
+  const [clickedLink, setClickedLink] = useState<boolean | undefined>();
   const [clickedProfile, setClickedProfile] = useState<boolean>();
 
   const location = useLocation();
@@ -63,12 +59,10 @@ const Nav = (props: NavType) => {
       </div>
       <Link to="/preview">
         <div className="hidden sm:flex">
-          {/* <Button name="Preview" icon="" className="text-[#633CFF] border-[#633CFF] h-[46px]" handleClick={()=> {}}/> */}
-          <ButtonS text="Preview" icon="" />
+          <ButtonS text="Preview" icon="" handleClick={()=>{}}/>
         </div>
         <div className="sm:hidden">
-          <ButtonS text="" icon={<Eye />} />
-          {/* <Button name="" icon={<Eye/>} className="text-[#633CFF] border-[#633CFF] h-[46px]" handleClick={()=> {}}/> */}
+          <ButtonS text="" icon={<Eye />} handleClick={()=>{}}/>
         </div>
       </Link>
     </div>

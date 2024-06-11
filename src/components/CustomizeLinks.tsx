@@ -27,7 +27,7 @@ let arrayIds: number[] = [];
 
 
 const CustomizeLinks = memo(({ data, setData }: any) => {
-
+  
 
   const [isSaved, setIsSaved] = useState(false);
   const { data: dataProfile } = useQuery(GET_PROFILES);
@@ -41,6 +41,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
 
   const mySchema = z.object({
     links: z.array(z.object({
+      id: z.number().min(0).nullable(),
     platform_name: z.string().nonempty(), 
     link: z.string().min(1,{ message:"Can't be empty" }).url( "Please check the URL"),
   }).refine((data) =>
@@ -61,7 +62,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm({
+  } = useForm<Links>({
     defaultValues: {
       links: data?.links || [],
     },
@@ -82,6 +83,20 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
     };
     setData(filteredCopyData);
   });
+
+  type Link = {
+    id_: number;
+    // other properties
+  };
+
+  function isLink(value: unknown): value is Link {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'id_' in value &&
+      typeof (value as Link).id_ === 'number'
+    );
+  }
 
   const onSubmit: SubmitHandler<Links> = async (Data) => {
     try {
@@ -110,7 +125,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
     remove(idx);
   };
 
-  const handleDrag = async ({ source, destination }) => {
+  const handleDrag = async ({ source, destination }:any) => {
     if (destination) {
       move(source.index, destination.index);
     }
@@ -153,7 +168,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
             ) : (
               <DragDropContext onDragEnd={handleDrag}>
                 <Droppable droppableId="links-items">
-                  {(provided, snapshot) => (
+                  {(provided) => (
                     <ul {...provided.droppableProps} ref={provided.innerRef}>
                       {fields.map((field, idx) => {
                         return (
@@ -162,7 +177,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                             draggableId={`item-${idx}`}
                             index={idx}
                           >
-                            {(provided, snapshot) => (
+                            {(provided) => (
                               <li
                                 key={field.id}
                                 className="w-full bg-gray-100 p-5 rounded-xl mt-[24px]"
@@ -180,7 +195,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                                   <button
                                     className="text-[#737373] text-[16px]"
                                     type="button"
-                                    onClick={() => handleRemove(idx, field.id_)}
+                                    onClick={() => { if(isLink(field)){handleRemove(idx, field.id_);}}}
                                   >
                                     Remove
                                   </button>
@@ -204,13 +219,13 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                                   </div>
                                   <div>
                                     <div className="text-[12px]">Link</div>
-                                    {(errors.links && errors.links[idx] && errors.links[idx]?.link && errors.links[idx]?.link.message) ? <Input
+                                    {(errors.links && (errors.links as Record<string, any>)[idx] && (errors.links as Record<string, any>)[idx]?.link && (errors.links as Record<string, any>)[idx]?.link.message) ? <Input
                                       value={field.link}
                                       placeholder="e.g. https://www.website.com/johnappleseed"
                                       type="text"
                                       register={register(`links.${idx}.link`)}
-                                      error={errors.links && errors.links[idx]}
-                                      errorMessage={errors.links && errors.links[idx]?.link.message}
+                                      error={errors.links && (errors.links as Record<string, any>)[idx]}
+                                      errorMessage={errors.links && (errors.links as Record<string, any>)?.link.message}
                                     />
                                     :
                                     <Input
@@ -239,7 +254,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
         </div>
         <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute inset-x-0 bottom-0  sm:flex">
           <div className="sm:w-[96px]">
-            <ButtonP text="Save" />
+            <ButtonP text="Save" handleClick={()=>{}}/>
           </div>
           <div
             className={`sm:max-w-[409px] w-full fixed bottom-[20px] left-1/2 -translate-x-1/2  text-center bg-[#333333] text-[#FAFAFA] text-[16px] px-[24px] py-[16px] transition-opacity duration-300 ease-in-out rounded-xl ${

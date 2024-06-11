@@ -4,7 +4,7 @@ import { IoLogoLinkedin } from "react-icons/io";
 import { FaLink, FaYoutube } from "react-icons/fa";
 import { PiGithubLogoFill } from "react-icons/pi";
 import ArrowRight from "./components/icons/ArrowRight";
-import { Profiler, useRef, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_LINKS, GET_PROFILES } from "./graphql/queries";
@@ -30,7 +30,6 @@ const platforms = [
 const Preview = () => {
   const { loading, error, data } = useQuery(GET_LINKS);
   const { data: dataProfile } = useQuery(GET_PROFILES);
-  // const { imgUrl = "", first_name = "", last_name = "", email = ""} = User.Profile;
   const [isCopied, setIsCopied] = useState(false);
 
 	const handleClick = async () => {
@@ -47,17 +46,19 @@ const Preview = () => {
 		}
 	};
 
-  return (
-    //  {/* ---------- */}
+  if(loading)
+    return <div>loading</div>;
+  if(error)
+    return <div>error</div>;
 
-    //  {/* ---------- */}
+  return (
 
     <div className="relative bg-white sm:bg-gray-100 h-screen">
       <div className="sm:h-[357px] w-full sm:bg-blue rounded-b-3xl sm:p-5">
         <div className="sm:h-[78px] w-full bg-white rounded-xl flex justify-between items-center px-[24px] py-[16px]">
           <div className="w-[159.5px] sm:w-[163px] h-[46px] ">
             <Link to="/">
-              <ButtonS text="Back to Editor" />
+              <ButtonS text="Back to Editor" icon="" handleClick={()=>{}}/>
             </Link>
           </div>
           <div className="w-[159.5px] sm:w-[163px] h-[46px] ">

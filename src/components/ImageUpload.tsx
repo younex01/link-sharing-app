@@ -10,26 +10,27 @@ interface ImageType{
 }
 
 const ImageUpload = ({value, id}: ImageType) => {
-    const [selectedImage, setSelectedImage] = useState();
-    const [updateAvatar, { data, loading, error }] = useMutation(UPDATE_PROFILE_AVATAR, {refetchQueries: [{ query: GET_PROFILES }]});
+    const [selectedImage, setSelectedImage] = useState<string | ArrayBuffer | null>();
+    const [updateAvatar] = useMutation(UPDATE_PROFILE_AVATAR, {refetchQueries: [{ query: GET_PROFILES }]});
 
     useEffect(()=>{
         console.log("image_value",value);
         setSelectedImage(value);
     },[value])
 
-    const handleImageChange =  (event) => {
+    const handleImageChange =  (event:any) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = async (e) => {
-                setSelectedImage(e.target.result);
-                console.log(id,"---",selectedImage,"---",e.target?.result,"--",value);
+                if(e.target)
+                    setSelectedImage(e.target.result);
+
                 try {
                     const response = await updateAvatar({
                       variables: {
                         id: id,
-                        avatar: e.target?.result, // Replace with the actual avatar URL
+                        avatar: e.target?.result,
                       },
                     });
                     console.log('Profile updated:', response.data.update_profile.returning);
@@ -46,7 +47,7 @@ const ImageUpload = ({value, id}: ImageType) => {
                 <input type="file" className="opacity-0 absolute w-[193px] h-[193px]" onChange={handleImageChange} />
                 {selectedImage ? (
                     <>
-                        <img src={selectedImage} className="w-full h-full object-cover" />
+                        <img src={selectedImage as string} className="w-full h-full object-cover" />
                         <div className="absolute flex flex-col justify-center items-center text-white">
                             <FaRegImage className="text-3xl mb-2" />
                             <div className="flex flex-row justify-center items-center">

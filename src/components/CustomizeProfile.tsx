@@ -38,7 +38,7 @@ const CustomizeProfile = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<Profile>({ resolver: zodResolver(mySchema) });
 
   const onSubmit: SubmitHandler<ProfileType> = async (Data) => {
@@ -165,7 +165,7 @@ const CustomizeProfile = () => {
         </div>
         <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute inset-x-0 bottom-0  sm:flex">
           <div className="sm:w-[96px]">
-            <ButtonP text="Save" />
+            <ButtonP text="Save" handleClick={()=>{}}/>
           </div>
           <div
             className={`sm:max-w-[409px] w-full fixed bottom-[20px] left-1/2 -translate-x-1/2  text-center bg-[#333333] text-[#FAFAFA] text-[16px] px-[24px] py-[16px] transition-opacity duration-300 ease-in-out rounded-xl ${

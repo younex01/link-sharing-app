@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ArrowDown from "./icons/ArrowDown";
 import ArrowUp from "./icons/ArrowUp";
 import { IoLogoLinkedin } from "react-icons/io";
@@ -13,43 +13,16 @@ const menuItems = [
 
 const Dropdown = ({value, onChange, register}:any) => {
   const [isOpen, setIsOpen] = useState(false);
-  // const [clickedIndex, setClickedIndex] = useState<number | null>(null);
-  // const [clickedValue, setClickedValue] = useState<string | null>(null);
-  // const [clickedIcon, setClickedIcon] = useState(null);
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
-  console.log("from drop down ->",value);
-  const handleItemClick = (index: number, value: string, icon: any) => {
-    console.log("from drop down >-",value);
-    // setClickedIndex(index);
-    // setClickedValue(value);
-    // setClickedIcon(icon);
+
+  const handleItemClick = (value: string) => {
     setIsOpen(!isOpen);
     onChange(value);
   };
   
-  // setClickedValue(value);
-  // onChange(value);
-  // useEffect(()=>{
-  //   menuItems.map((item)=>{
-  //     if(item.label === value)
-  //     {
-  //       // setClickedValue(value);
-  //       onChange(value);
-  //       setClickedIcon(item.icon);
-  //     }
-  //   })
-  // },[value])
-  
-  // useEffect(() => {
-  //   console.log(clickedValue);
-  //   // setPlatforms(clickedValue, idx);
-  // }, [clickedValue])
-  // let iconValue =  menuItems.find(menuItem => menuItem.label === value)?.icon;
-  // let iconValue =  menuItems.findIndex(menuItem => menuItem.label === value)?.icon;
-
   return (
     <div className="relative inline-block text-left w-full">
       <button
@@ -62,7 +35,6 @@ const Dropdown = ({value, onChange, register}:any) => {
       >
         {!value ? <div>Choose a platform</div> :
         <div className={`flex flex-row gap-5 items-center text-gray-300`}>
-          {/* {clickedIcon} */}
           {menuItems.find(menuItem => menuItem.label === value)?.icon}
           {value}
         </div>}
@@ -87,7 +59,7 @@ const Dropdown = ({value, onChange, register}:any) => {
             {menuItems.map((item, index) => (
               <li key={index} >
                 <button
-                  onClick={() => handleItemClick(index, item.label, item.icon)}
+                  onClick={() => handleItemClick(item.label)}
                   className={`border-b  border-gray-200 px-2 py-2 w-full text-left  ${menuItems.findIndex(menuItem => menuItem.label === value) == index ? 'text-blue' : 'text-gray-300'}`}
                 >
                   <div className={`flex flex-row gap-5 items-center hover:text-blue ${menuItems.findIndex(menuItem => menuItem.label === value) == index ? 'text-blue' : 'text-gray-300'}`}>
