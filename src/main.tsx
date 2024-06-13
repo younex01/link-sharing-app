@@ -55,7 +55,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     domain={domain}
     clientId={clientId}
     authorizationParams={{
-      redirect_uri: 'https://link-sharing-app-ebon.vercel.app/'
+      redirect_uri: window.location.origin
     }}
   >
     <ApolloProvider client={client}>

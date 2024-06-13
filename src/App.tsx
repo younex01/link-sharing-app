@@ -41,8 +41,8 @@ function App() {
             <Nav />
           </div>
           <div className="bg-[#FAFAFA] w-full h-full flex flex-row gap-5 p-[16px] sm:p-0 sm:mx-[24px]">
-            <Phone data={copyData} dataProfile={dataProfile} />
-            <CustomizeLinks data={data} setData={setCopyData} />
+            <Phone data={copyData}  dataProfile={dataProfile} />
+            <CustomizeLinks data={data} setData={setCopyData} dataProfile={dataProfile} />
           </div>
         </div>
       </div>

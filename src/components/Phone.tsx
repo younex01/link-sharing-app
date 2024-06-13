@@ -26,11 +26,11 @@ const platforms = [
 
 const Phone = ({data, dataProfile}:any) => {
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    console.log("from phone useEffect", data);
-  }, [dataProfile,data])
-  console.log("from Phone", dataProfile);
+  //   console.log("from phone useEffect", data);
+  // }, [dataProfile,data])
+  // console.log("from Phone", dataProfile);
 
   return (
     <div className="hidden lg:flex bg-white rounded-xl w-2/3  justify-center items-center">

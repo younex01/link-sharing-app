@@ -13,7 +13,7 @@ import {
   useFieldArray,
   Controller,
 } from "react-hook-form";
-import { GET_LINKS, GET_PROFILE } from "../graphql/queries";
+import { GET_LINKS, GET_PROFILES } from "../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   DELETE_LINK,
@@ -22,20 +22,14 @@ import {
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Save from "./icons/Save";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth0 } from "@auth0/auth0-react";
 
 let arrayIds: number[] = [];
 
 
-const CustomizeLinks = memo(({ data, setData }: any) => {
+const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
   
-  const { user, isLoading } = useAuth0();
-  if(isLoading)
-    return <div>loading</div>;
+
   const [isSaved, setIsSaved] = useState(false);
-  const { data: dataProfile } = useQuery(GET_PROFILE, {
-    variables: { user_id: user?.sub }
-  });
   const [deleteLink] = useMutation(DELETE_LINK, {
     refetchQueries: [{ query: GET_LINKS }],
   });
@@ -80,6 +74,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
   });
 
   const watchedFields = watch("links");
+  console.log("from watch",watchedFields);
 
   useEffect(() => {
     const filteredCopyData = {
@@ -104,6 +99,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
   }
 
   const onSubmit: SubmitHandler<Links> = async (Data) => {
+    console.log("asdadsf");
     try {
       if (arrayIds.length > 0) {
         arrayIds.forEach(async (id) => await deleteLink({ variables: { id } }));
@@ -176,6 +172,7 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                   {(provided) => (
                     <ul {...provided.droppableProps} ref={provided.innerRef}>
                       {fields.map((field, idx) => {
+                        console.log("errors: ->",errors);
                         return (
                           <Draggable
                             key={`links[${idx}]`}
@@ -224,13 +221,13 @@ const CustomizeLinks = memo(({ data, setData }: any) => {
                                   </div>
                                   <div>
                                     <div className="text-[12px]">Link</div>
-                                    {(errors.links && (errors.links as Record<string, any>)[idx] && (errors.links as Record<string, any>)[idx]?.link && (errors.links as Record<string, any>)[idx]?.link.message) ? <Input
+                                    {(errors.links && (errors.links as Record<string, any>)[idx] && (errors.links as Record<string, any>)[idx].link && (errors.links as Record<string, any>)[idx].link.message) ? <Input
                                       value={field.link}
                                       placeholder="e.g. https://www.website.com/johnappleseed"
                                       type="text"
                                       register={register(`links.${idx}.link`)}
                                       error={errors.links && (errors.links as Record<string, any>)[idx]}
-                                      errorMessage={errors.links && (errors.links as Record<string, any>)?.link.message}
+                                      errorMessage={errors.links && (errors.links as Record<string, any>)[idx].link.message}
                                     />
                                     :
                                     <Input
