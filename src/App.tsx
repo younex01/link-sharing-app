@@ -9,18 +9,21 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
   const { user, isLoading } = useAuth0();
+  if(isLoading)
+    return <div>loading</div>;
+  console.log(user);
   const { data: dataProfile } = useQuery(
     GET_PROFILE,
     {
       variables: { user_id: user?.sub },
-      skip: isLoading || !user?.sub,
     }
   );
 
-  const id = dataProfile?.profile[0]?.id;
+  const id = dataProfile?.profile[0].id;
+  console.log("==",id,dataProfile);
   const { loading, error, data } = useQuery(GET_LINKS, {
     variables: { id },
-    skip: !id, 
+    skip: !dataProfile?.profile[0]?.id || !id, 
   });
   const [copyData,setCopyData] = useState({...data});
 
