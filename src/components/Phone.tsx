@@ -1,6 +1,4 @@
-import { useQuery } from "@apollo/client";
 import PhoneCase from "./PhoneCase"
-import { GET_PROFILES } from "../graphql/queries";
 import { useEffect } from "react";
 import { FaYoutube } from "react-icons/fa6";
 import { PiGithubLogoFill } from "react-icons/pi";
