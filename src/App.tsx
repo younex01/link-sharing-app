@@ -2,18 +2,33 @@ import { useQuery } from "@apollo/client";
 import CustomizeLinks from "./components/CustomizeLinks"
 import Nav from "./components/Nav"
 import Phone from "./components/Phone"
-import { GET_LINKS } from "./graphql/queries";
+import { GET_LINKS, GET_PROFILE } from "./graphql/queries";
 import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 
 function App() {
-  const { data, loading, error } = useQuery(GET_LINKS);
+  const { user, isLoading } = useAuth0();
+  const { data: dataProfile } = useQuery(
+    GET_PROFILE,
+    {
+      variables: { user_id: user?.sub },
+      skip: isLoading || !user?.sub,
+    }
+  );
+
+  const id = dataProfile?.profile[0]?.id;
+  const { loading, error, data } = useQuery(GET_LINKS, {
+    variables: { id },
+    skip: !id, 
+  });
   const [copyData,setCopyData] = useState({...data});
 
   if(loading)
     return <div>loading</div>;
   if(error)
     return <div>error</div>;
+  console.log("data from user:",user?.sub);
   
   return (
     <>

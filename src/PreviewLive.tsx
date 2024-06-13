@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { GET_PROFILE } from "./graphql/queries";
+import { GET_PROFILE_BY_ID } from "./graphql/queries";
 import { useQuery } from "@apollo/client";
 import { FaYoutube } from "react-icons/fa6";
 import { PiGithubLogoFill } from "react-icons/pi";
@@ -26,7 +26,7 @@ const platforms = [
 
 const PreviewLive = () => {
   let { id } = useParams();
-  const { data, loading, error } = useQuery(GET_PROFILE, {
+  const { data, loading, error } = useQuery(GET_PROFILE_BY_ID, {
     variables: {
       id: id,
     },
@@ -52,9 +52,11 @@ const PreviewLive = () => {
                 />
               ) : null}
             </div>
-            <div className="text-2xl font-bold pt-[25px]  text-[32px] h-[48px] ">{`${data.profile_by_pk.first_name} ${data.profile_by_pk.last_name}`}</div>
-            <div className="text-[16px] text-[#737373] h-[24px] pt-[16px]">{data.profile_by_pk.email}</div>
-            <div className="relative w-full pt-[40px] ">
+            <div className="flex justify-center flex-col items-center pt-[25px]">
+            <div className="font-bold   text-[32px]  text-center">{`${data.profile_by_pk.first_name} ${data.profile_by_pk.last_name}`}</div>
+            </div>
+            <div className="text-[16px] text-[#737373] h-[24px]">{data.profile_by_pk.email}</div>
+            <div className="relative w-full pt-[56px]">
               {Array.from({
                 length: Math.max(
                   4,

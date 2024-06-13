@@ -7,7 +7,8 @@ import ArrowRight from "./components/icons/ArrowRight";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_LINKS, GET_PROFILES } from "./graphql/queries";
+import { GET_LINKS, GET_PROFILE } from "./graphql/queries";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const platforms = [
   {
@@ -28,8 +29,17 @@ const platforms = [
 ];
 
 const Preview = () => {
-  const { loading, error, data } = useQuery(GET_LINKS);
-  const { data: dataProfile } = useQuery(GET_PROFILES);
+  const { user, isLoading } = useAuth0();
+  if(isLoading)
+    return <div>loading</div>;
+  const { data: dataProfile, loading: isProfileLoading, } = useQuery(GET_PROFILE, {
+    variables: { user_id: user?.sub }
+  });
+  if (isProfileLoading) return <div>Loading links...</div>;
+  let id:number | undefined = dataProfile?.profile[0]?.id;
+  const { loading, error, data } = useQuery(GET_LINKS, {
+    variables: {id}
+  });
   const [isCopied, setIsCopied] = useState(false);
 
 	const handleClick = async () => {
@@ -89,11 +99,14 @@ const Preview = () => {
                   />
                 ) : null}
               </div>
-              <div className="text-2xl font-bold pt-[25px]  text-[32px] h-[48px] ">{`${dataProfile.profile[0].first_name} ${dataProfile.profile[0].last_name}`}</div>
-              <div className="text-[16px] text-[#737373] h-[24px] pt-[16px]">
+              <div className="flex justify-center flex-col items-center pt-[25px]">
+              <div className="font-bold   text-[32px]  text-center">{`${dataProfile.profile[0].first_name} ${dataProfile.profile[0].last_name}`}</div>
+              <div className="text-[16px] text-[#737373] h-[24px]">
                 {dataProfile.profile[0].email}
               </div>
-              <div className="relative w-full pt-[40px]">
+
+              </div>
+              <div className="relative w-full pt-[56px]">
                 {Array.from({
                   length: Math.max(
                     4,

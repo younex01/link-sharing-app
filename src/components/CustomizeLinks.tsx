@@ -13,7 +13,7 @@ import {
   useFieldArray,
   Controller,
 } from "react-hook-form";
-import { GET_LINKS, GET_PROFILES } from "../graphql/queries";
+import { GET_LINKS, GET_PROFILE } from "../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   DELETE_LINK,
@@ -22,15 +22,20 @@ import {
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Save from "./icons/Save";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth0 } from "@auth0/auth0-react";
 
 let arrayIds: number[] = [];
 
 
 const CustomizeLinks = memo(({ data, setData }: any) => {
   
-
+  const { user, isLoading } = useAuth0();
+  if(isLoading)
+    return <div>loading</div>;
   const [isSaved, setIsSaved] = useState(false);
-  const { data: dataProfile } = useQuery(GET_PROFILES);
+  const { data: dataProfile } = useQuery(GET_PROFILE, {
+    variables: { user_id: user?.sub }
+  });
   const [deleteLink] = useMutation(DELETE_LINK, {
     refetchQueries: [{ query: GET_LINKS }],
   });

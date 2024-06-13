@@ -4,12 +4,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ImageUpload from "./ImageUpload";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_PROFILES } from "../graphql/queries";
+import { GET_PROFILE } from "../graphql/queries";
 import { ADD_PROFILE } from "../graphql/mutations";
 import { UPDATE_PROFILE } from "../graphql/mutations";
 import ButtonP from "./ButtonP";
 import Save from "./icons/Save";
 import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface ProfileType {
   first_name: string;
@@ -19,12 +20,17 @@ interface ProfileType {
 
 const CustomizeProfile = () => {
   
-  const { loading, error, data } = useQuery(GET_PROFILES);
+  const { user, isLoading } = useAuth0();
+  if(isLoading)
+    return <div>loading</div>;
+  const { data, error, loading } = useQuery(GET_PROFILE, {
+    variables: { user_id: user?.sub }
+  });
   const [addProfile] = useMutation(ADD_PROFILE, {
-    refetchQueries: [{ query: GET_PROFILES }],
+    refetchQueries: [{ query: GET_PROFILE }],
   });
   const [updateProfile] = useMutation(UPDATE_PROFILE, {
-    refetchQueries: [{ query: GET_PROFILES }],
+    refetchQueries: [{ query: GET_PROFILE }],
   });
   const [isSaved, setIsSaved] = useState(false);
   const mySchema = z.object({

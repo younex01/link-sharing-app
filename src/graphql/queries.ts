@@ -12,7 +12,7 @@ query get_profiles {
 }
 `;
 
-export const GET_PROFILE = gql`
+export const GET_PROFILE_BY_ID = gql`
 query GetProfile($id: Int!) {
   profile_by_pk(id: $id) {
     id
@@ -29,12 +29,25 @@ query GetProfile($id: Int!) {
 }
 `;
 
+export const GET_PROFILE = gql`
+query MyQuery($user_id: String!) {
+  profile(where: { user_id: { _eq: $user_id } }) {
+    user_id
+    avatar
+    email
+    first_name
+    last_name
+    id
+  }
+}
+`;
+
 export const GET_LINKS = gql`
-query get_links {
-  links {
-    id_
+query get_links($id: Int!) {
+  links(where: {profile_id: {_eq: $id}}) {
     platform_name
     link
+    id_
   }
 }
 `
