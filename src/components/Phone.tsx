@@ -26,8 +26,7 @@ const platforms = [
   }
 ];
 
-const Phone = ({data}:any) => {
-  const { data: dataProfile } = useQuery(GET_PROFILES);
+const Phone = ({data, dataProfile}:any) => {
 
   useEffect(() => {
 
