@@ -33,10 +33,9 @@ const Preview = () => {
   const [isCopied, setIsCopied] = useState(false);
 
 	const handleClick = async () => {
-    const domain = import.meta.env.VITE_REACT_APP_DOMAIN_PREVIEW;
 		try {
 			await navigator.clipboard.writeText(
-				`${domain}${dataProfile.profile[0].id}`
+				`${dataProfile.profile[0].id}`
 			);
 			setIsCopied(true);
 
