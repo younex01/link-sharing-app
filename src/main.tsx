@@ -58,6 +58,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       redirect_uri: window.location.origin
     }}
   >
+    
     <ApolloProvider client={client}>
       <RouterProvider router={router} />
     </ApolloProvider>
