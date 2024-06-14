@@ -8,6 +8,8 @@ import { useLocation } from "react-router-dom";
 import LogoOnly from "./LogoOnly";
 import Eye from "./icons/Eye";
 import ButtonS from "./ButtonS";
+import { useAuth0 } from "@auth0/auth0-react";
+import { CiLogout } from "react-icons/ci";
 
 
 const Nav = () => {
@@ -17,6 +19,7 @@ const Nav = () => {
   const location = useLocation();
   const isProfilePage = location.pathname === "/profile";
   const isRootPath = location.pathname === "/";
+  const {logout} = useAuth0();
 
   useEffect(() => {
     if (isProfilePage) {
@@ -65,6 +68,14 @@ const Nav = () => {
           <ButtonS text="" icon={<Eye />} handleClick={()=>{}}/>
         </div>
       </Link>
+      <div>
+        <div className="hidden sm:flex">
+          <ButtonS text="Logout" icon="" handleClick={()=> logout({ logoutParams: { returnTo: 'https://link-sharing-app-ebon.vercel.app/' } })}/>
+        </div>
+        <div className="sm:hidden">
+          <ButtonS text="" icon={<CiLogout />} handleClick={()=> logout({ logoutParams: { returnTo: 'https://link-sharing-app-ebon.vercel.app/' } })}/>
+        </div>
+      </div>
     </div>
     </div>
   );
