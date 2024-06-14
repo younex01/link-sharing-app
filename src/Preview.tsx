@@ -109,7 +109,7 @@ const Preview = () => {
               <div className="relative w-full pt-[56px]">
                 {Array.from({
                   length: Math.max(
-                    4,
+                    2,
                     data && data.links ? data.links.length : 0
                   ),
                 }).map((_, idx) => {

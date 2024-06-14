@@ -26,11 +26,11 @@ const platforms = [
 const Phone = ({data, dataProfile}:any) => {
 
   return (
-    <div className="hidden lg:flex bg-white rounded-xl w-2/3  justify-center items-center">
+    <div className="hidden lg:flex bg-white rounded-xl w-2/3  justify-center items-center max-h-[calc(100vh-154px)]  overflow-y-auto no-scrollbar">
       <div className="relative flex justify-center items-center">
         {dataProfile && dataProfile.profile ? (
           <>
-            <PhoneCase />
+            <PhoneCase/>
             <div className="bg-white m-5 absolute w-[250px] h-[550px] flex flex-col">
               <img src={dataProfile.profile[0].avatar} className="h-[96px] w-[96px] bg-white rounded-full mb-auto mt-8 mx-auto object-cover" />
               <div className="text-lg font-medium mb-auto mx-auto">{dataProfile.profile[0].first_name} {dataProfile.profile[0].last_name}</div>

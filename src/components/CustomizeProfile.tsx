@@ -78,18 +78,19 @@ const CustomizeProfile = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="relative bg-white rounded-xl  h-full  flex flex-col w-full px-[24px] pt-[24px] sm:px-[40px] sm:pt-[40px]">
+    <div className="relative bg-white rounded-xl   h-full sm:h-[calc(100vh-154px)] flex flex-col w-full px-[24px] pt-[24px] sm:px-[40px] sm:pt-[40px]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col justify-between h-full rounded-xl"
       >
-        <div className=" bg-white y-overflow-auto -translate-x-1">
+        <div className=" overflow-y-auto bg-white  -translate-x-1">
           <div className="font-bold text-[24px] sm:text-[32px] mb-5 ">
             Profile Details
           </div>
           <div className="text-[16px] mb-[40px] text-[#737373]">
             Add your details to create a personal touch to your profile.
           </div>
+          <div className="">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#FAFAFA] p-[20px] gap-[24px] rounded-xl">
             <div className="text-[16px]  text-[#737373]">Profile picture</div>
             <ImageUpload
@@ -166,9 +167,10 @@ const CustomizeProfile = () => {
                 />
               </div>
             </div>
+            </div>
           </div>
         </div>
-        <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute inset-x-0 bottom-0  sm:flex">
+        <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px]  inset-x-0 bottom-0  sm:flex">
           <div className="sm:w-[96px]">
             <ButtonP
               text="Save"

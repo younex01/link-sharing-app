@@ -31,8 +31,8 @@ const Profile = () => {
 
   return (
     <>
-      <div className="bg-[#FAFAFA] ">
-        <div className=" h-screen  flex flex-col items-center sm:gap-5 sm:mx-[24px] sm:py-[24px]">
+      <div className="bg-[#FAFAFA] h-screen ">
+        <div className="h-screen  flex flex-col items-center sm:gap-5 sm:mx-[24px] sm:py-[24px]">
           <div className="w-full ">
             <Nav />
           </div>

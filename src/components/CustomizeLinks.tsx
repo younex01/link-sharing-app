@@ -95,20 +95,6 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
     setData(filteredCopyData);
   });
 
-  // type Link = {
-  //   id_: number;
-  //   // other properties
-  // };
-
-  // function isLink(value: unknown): value is Link {
-  //   return (
-  //     typeof value === 'object' &&
-  //     value !== null &&
-  //     'id_' in value &&
-  //     typeof (value as Link).id_ === 'number'
-  //   );
-  // }
-
   const onSubmit: SubmitHandler<any> = async (Data) => {
     try {
       if (arrayIds.length > 0) {

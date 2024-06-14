@@ -58,7 +58,7 @@ const PreviewLive = () => {
             <div className="relative w-full pt-[56px]">
               {Array.from({
                 length: Math.max(
-                  4,
+                  2,
                   data && data.profile_by_pk.links
                     ? data.profile_by_pk.links.length
                     : 0
