@@ -74,7 +74,7 @@ const Preview = () => {
           <div className="w-[159.5px] sm:w-[163px] h-[46px] ">
             <ButtonP text="Share Link" handleClick={handleClick} disable={false}/>
             <div
-              className={`sm:max-w-[409px] w-full fixed bottom-[20px] left-1/2 -translate-x-1/2  text-center bg-[#333333] text-[#FAFAFA] text-[16px] px-[24px] py-[16px] transition-opacity duration-300 ease-in-out rounded-xl ${
+              className={` z-50 sm:max-w-[409px] w-full fixed bottom-[20px] left-1/2 -translate-x-1/2  text-center bg-[#333333] text-[#FAFAFA] text-[16px] px-[24px] py-[16px] transition-opacity duration-300 ease-in-out rounded-xl ${
                 isCopied ? "" : "opacity-0"
               }`}
             >

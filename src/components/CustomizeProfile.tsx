@@ -19,12 +19,10 @@ interface ProfileType {
 }
 
 const CustomizeProfile = () => {
-  
   const { user, isLoading } = useAuth0();
-  if(isLoading)
-    return <div>loading</div>;
+  if (isLoading) return <div>loading</div>;
   const { data, error, loading } = useQuery(GET_PROFILE, {
-    variables: { user_id: user?.sub }
+    variables: { user_id: user?.sub },
   });
   const [addProfile] = useMutation(ADD_PROFILE, {
     refetchQueries: [{ query: GET_PROFILE, variables: { user_id: user?.sub } }],
@@ -44,7 +42,7 @@ const CustomizeProfile = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors,isSubmitting},
+    formState: { errors, isSubmitting },
   } = useForm<Profile>({ resolver: zodResolver(mySchema) });
 
   const onSubmit: SubmitHandler<ProfileType> = async (Data) => {
@@ -81,10 +79,14 @@ const CustomizeProfile = () => {
 
   return (
     <div className="relative bg-white rounded-xl  h-full  flex flex-col w-full px-[24px] pt-[24px] sm:px-[40px] sm:pt-[40px]">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between h-full rounded-xl">
-        <div className=" bg-white overflow-auto">
-
-          <div className="font-bold text-[24px] sm:text-[32px] mb-5 ">Profile Details</div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col justify-between h-full rounded-xl"
+      >
+        <div className=" bg-white y-overflow-auto -translate-x-1">
+          <div className="font-bold text-[24px] sm:text-[32px] mb-5 ">
+            Profile Details
+          </div>
           <div className="text-[16px] mb-[40px] text-[#737373]">
             Add your details to create a personal touch to your profile.
           </div>
@@ -165,11 +167,14 @@ const CustomizeProfile = () => {
               </div>
             </div>
           </div>
-
         </div>
         <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute inset-x-0 bottom-0  sm:flex">
           <div className="sm:w-[96px]">
-            <ButtonP text="Save" handleClick={()=>{}} disable={isSubmitting}/>
+            <ButtonP
+              text="Save"
+              handleClick={() => {}}
+              disable={isSubmitting}
+            />
           </div>
           <div
             className={`sm:max-w-[409px] w-full fixed bottom-[20px] left-1/2 -translate-x-1/2  text-center bg-[#333333] text-[#FAFAFA] text-[16px] px-[24px] py-[16px] transition-opacity duration-300 ease-in-out rounded-xl ${
