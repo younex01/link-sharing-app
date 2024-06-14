@@ -40,7 +40,7 @@ const PreviewLive = () => {
     <div className="relative bg-white sm:bg-gray-100 h-screen">
        <div className="sm:h-[357px] w-full sm:bg-blue rounded-b-3xl sm:p-5"></div>
       <div className="flex justify-center ">
-        <div className="sm:absolute top-1/4 w-[349px] min-h-[569px] bg-white rounded-3xl">
+        <div className="sm:absolute top-1/4 w-[349px] bg-white rounded-3xl">
           <div className="relative flex justify-center flex-col items-center w-full h-full   pt-[48px] px-[56px]">
           <div className="w-[237px] flex justify-center flex-col items-center">
             <div className="h-[104px] w-[104px] rounded-full bg-blue border-4 border-blue">
