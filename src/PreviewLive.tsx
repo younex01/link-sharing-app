@@ -34,7 +34,6 @@ const PreviewLive = () => {
   if (loading) return <div>loading...</div>;
   if (error) return <div>ERROR!!!</div>;
   if (!data.profile_by_pk) return <div>NO DATA FOUND!!</div>;
-  console.log(data);
 
   return (
     <div className="relative bg-white sm:bg-gray-100 h-screen">

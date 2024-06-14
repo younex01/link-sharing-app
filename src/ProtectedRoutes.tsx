@@ -14,12 +14,10 @@ const ProtectedRoutes = () => {
   
 
     useEffect(()=>{
-        console.log(user);
+        // console.log(user);
       },[user])
     
-    console.log('user at ProtectedPage: ', user,"auto",isAuthenticated);
     if (!isAuthenticated) {
-      console.log("----------->hereeee");
       return(
         <>
         <div className="flex justify-center items-center h-screen">
@@ -28,7 +26,6 @@ const ProtectedRoutes = () => {
         </>
         );
       }
-      console.log("<-----------not here");
 };
 
 

@@ -1,5 +1,4 @@
 import PhoneCase from "./PhoneCase"
-import { useEffect } from "react";
 import { FaYoutube } from "react-icons/fa6";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { IoLogoLinkedin } from "react-icons/io";
@@ -25,12 +24,6 @@ const platforms = [
 ];
 
 const Phone = ({data, dataProfile}:any) => {
-
-  // useEffect(() => {
-
-  //   console.log("from phone useEffect", data);
-  // }, [dataProfile,data])
-  // console.log("from Phone", dataProfile);
 
   return (
     <div className="hidden lg:flex bg-white rounded-xl w-2/3  justify-center items-center">

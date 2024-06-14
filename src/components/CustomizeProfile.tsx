@@ -27,10 +27,10 @@ const CustomizeProfile = () => {
     variables: { user_id: user?.sub }
   });
   const [addProfile] = useMutation(ADD_PROFILE, {
-    refetchQueries: [{ query: GET_PROFILE }],
+    refetchQueries: [{ query: GET_PROFILE, variables: { user_id: user?.sub } }],
   });
   const [updateProfile] = useMutation(UPDATE_PROFILE, {
-    refetchQueries: [{ query: GET_PROFILE }],
+    refetchQueries: [{ query: GET_PROFILE, variables: { user_id: user?.sub } }],
   });
   const [isSaved, setIsSaved] = useState(false);
   const mySchema = z.object({
@@ -44,7 +44,7 @@ const CustomizeProfile = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors,isSubmitting},
   } = useForm<Profile>({ resolver: zodResolver(mySchema) });
 
   const onSubmit: SubmitHandler<ProfileType> = async (Data) => {
@@ -78,8 +78,6 @@ const CustomizeProfile = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
-
-  // console.log(data.profile[0].first_name);
 
   return (
     <div className="relative bg-white rounded-xl  h-full  flex flex-col w-full px-[24px] pt-[24px] sm:px-[40px] sm:pt-[40px]">
@@ -171,7 +169,7 @@ const CustomizeProfile = () => {
         </div>
         <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute inset-x-0 bottom-0  sm:flex">
           <div className="sm:w-[96px]">
-            <ButtonP text="Save" handleClick={()=>{}}/>
+            <ButtonP text="Save" handleClick={()=>{}} disable={isSubmitting}/>
           </div>
           <div
             className={`sm:max-w-[409px] w-full fixed bottom-[20px] left-1/2 -translate-x-1/2  text-center bg-[#333333] text-[#FAFAFA] text-[16px] px-[24px] py-[16px] transition-opacity duration-300 ease-in-out rounded-xl ${

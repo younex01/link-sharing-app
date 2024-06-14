@@ -11,7 +11,6 @@ function App() {
   const { user, isLoading } = useAuth0();
   if(isLoading)
     return <div>loading</div>;
-  console.log(user);
   const { data: dataProfile } = useQuery(
     GET_PROFILE,
     {
@@ -20,7 +19,6 @@ function App() {
   );
 
   const id = dataProfile?.profile[0].id;
-  console.log("==",id,dataProfile);
   const { loading, error, data } = useQuery(GET_LINKS, {
     variables: { id },
     skip: !dataProfile?.profile[0]?.id || !id, 
@@ -28,10 +26,9 @@ function App() {
   const [copyData,setCopyData] = useState({...data});
 
   if(loading)
-    return <div>loading</div>;
+    return <div>loading..</div>;
   if(error)
     return <div>error</div>;
-  console.log("data from user:",user?.sub);
   
   return (
     <>
@@ -42,7 +39,7 @@ function App() {
           </div>
           <div className="bg-[#FAFAFA] w-full h-full flex flex-row gap-5 p-[16px] sm:p-0 sm:mx-[24px]">
             <Phone data={copyData}  dataProfile={dataProfile} />
-            <CustomizeLinks data={data} setData={setCopyData} dataProfile={dataProfile} />
+            <CustomizeLinks data={data} setData={setCopyData}  />
           </div>
         </div>
       </div>

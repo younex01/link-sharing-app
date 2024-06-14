@@ -13,7 +13,7 @@ import {
   useFieldArray,
   Controller,
 } from "react-hook-form";
-import { GET_LINKS, GET_PROFILES } from "../graphql/queries";
+import { GET_LINKS, GET_PROFILE } from "../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   DELETE_LINK,
@@ -22,25 +22,36 @@ import {
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Save from "./icons/Save";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth0 } from "@auth0/auth0-react";
 
 let arrayIds: number[] = [];
 
 
-const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
-  
+const CustomizeLinks = memo(({ data, setData}: any) => {
+  const { user, isLoading } = useAuth0();
+  if(isLoading)
+    return <div>loading</div>;
+  const { data: dataProfile } = useQuery(
+    GET_PROFILE,
+    {
+      variables: { user_id: user?.sub },
+    }
+  );
+  const id = dataProfile?.profile[0].id;
 
   const [isSaved, setIsSaved] = useState(false);
   const [deleteLink] = useMutation(DELETE_LINK, {
-    refetchQueries: [{ query: GET_LINKS }],
+    refetchQueries: [{ query: GET_LINKS, variables: { id: id } }],
   });
   const [insertOneLink] = useMutation(INSERT_ONE_LINK, {
-    refetchQueries: [{ query: GET_LINKS }],
+    refetchQueries: [{ query: GET_LINKS , variables: { id: id }}],
     errorPolicy: "all",
   });
 
   const mySchema = z.object({
     links: z.array(z.object({
-      id: z.number().min(0).nullable(),
+    id_: z.any(),
+    id: z.any(),
     platform_name: z.string().nonempty(), 
     link: z.string().min(1,{ message:"Can't be empty" }).url( "Please check the URL"),
   }).refine((data) =>
@@ -61,6 +72,7 @@ const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
     handleSubmit,
     formState: { errors },
     watch,
+    formState: { isSubmitting},
   } = useForm<Links>({
     defaultValues: {
       links: data?.links || [],
@@ -74,7 +86,6 @@ const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
   });
 
   const watchedFields = watch("links");
-  console.log("from watch",watchedFields);
 
   useEffect(() => {
     const filteredCopyData = {
@@ -84,22 +95,21 @@ const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
     setData(filteredCopyData);
   });
 
-  type Link = {
-    id_: number;
-    // other properties
-  };
+  // type Link = {
+  //   id_: number;
+  //   // other properties
+  // };
 
-  function isLink(value: unknown): value is Link {
-    return (
-      typeof value === 'object' &&
-      value !== null &&
-      'id_' in value &&
-      typeof (value as Link).id_ === 'number'
-    );
-  }
+  // function isLink(value: unknown): value is Link {
+  //   return (
+  //     typeof value === 'object' &&
+  //     value !== null &&
+  //     'id_' in value &&
+  //     typeof (value as Link).id_ === 'number'
+  //   );
+  // }
 
-  const onSubmit: SubmitHandler<Links> = async (Data) => {
-    console.log("asdadsf");
+  const onSubmit: SubmitHandler<any> = async (Data) => {
     try {
       if (arrayIds.length > 0) {
         arrayIds.forEach(async (id) => await deleteLink({ variables: { id } }));
@@ -121,8 +131,8 @@ const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
     }
   };
 
-  const handleRemove = async (idx: number, id: number) => {
-    if (id) arrayIds.push(id);
+  const handleRemove = async (idx: number, id_: number) => {
+    if (id_) arrayIds.push(id_);
     remove(idx);
   };
 
@@ -172,7 +182,6 @@ const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
                   {(provided) => (
                     <ul {...provided.droppableProps} ref={provided.innerRef}>
                       {fields.map((field, idx) => {
-                        console.log("errors: ->",errors);
                         return (
                           <Draggable
                             key={`links[${idx}]`}
@@ -197,7 +206,7 @@ const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
                                   <button
                                     className="text-[#737373] text-[16px]"
                                     type="button"
-                                    onClick={() => { if(isLink(field)){handleRemove(idx, field.id_);}}}
+                                    onClick={() => {handleRemove(idx, field.id_)}}
                                   >
                                     Remove
                                   </button>
@@ -221,7 +230,7 @@ const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
                                   </div>
                                   <div>
                                     <div className="text-[12px]">Link</div>
-                                    {(errors.links && (errors.links as Record<string, any>)[idx] && (errors.links as Record<string, any>)[idx].link && (errors.links as Record<string, any>)[idx].link.message) ? <Input
+                                    {errors.links && errors.links[idx]  ? <Input
                                       value={field.link}
                                       placeholder="e.g. https://www.website.com/johnappleseed"
                                       type="text"
@@ -238,7 +247,7 @@ const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
                                       error=""
                                       errorMessage=""
                                     />
-                                  }
+                                   }
                                   </div>
                                 </div>
                               </li>
@@ -256,7 +265,7 @@ const CustomizeLinks = memo(({ data, setData, dataProfile}: any) => {
         </div>
         <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute inset-x-0 bottom-0  sm:flex">
           <div className="sm:w-[96px]">
-            <ButtonP text="Save" handleClick={()=>{}}/>
+            <ButtonP text="Save" handleClick={()=>{}} disable={isSubmitting}/>
           </div>
           <div
             className={`sm:max-w-[409px] w-full fixed bottom-[20px] left-1/2 -translate-x-1/2  text-center bg-[#333333] text-[#FAFAFA] text-[16px] px-[24px] py-[16px] transition-opacity duration-300 ease-in-out rounded-xl ${

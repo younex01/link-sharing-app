@@ -34,11 +34,13 @@ const router = createBrowserRouter([
   },
   {
     path: "/preview",
-    element: <AuthenticationGuard component={Preview} />
+    element: <AuthenticationGuard component={Preview} />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/profile",
-    element: <AuthenticationGuard component={Profile} />
+    element: <AuthenticationGuard component={Profile} />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/preview/:id",

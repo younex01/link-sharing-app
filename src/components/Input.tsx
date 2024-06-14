@@ -33,7 +33,7 @@ const Input = (props: InputType) => {
           <Icon_chain />
         </div>
         <input type={props.type} value={inputValue || ''}  className={`bg-white border ${props.error ? 'border-red' : 'border-gray-200'} text-gray-900 rounded-lg focus:ring-${props.error ? 'red' : 'blue'} focus:border-${props.error ? 'red' : 'blue'} block w-full ps-10  ${props.error ? 'focus:shadow-none' : 'focus:shadow-md focus:shadow-purple-200'} outline-none text-sm px-5 py-2.5`} placeholder={props.placeholder}  {...props.register} onChange={handleInputChange}/>
-        {props.error && <div className="absolute end-3 inset-y-0 flex items-center ps-3.5 pointer-events-none text-red text-sm">{props.errorMessage}</div>}
+        {props.errorMessage && <div className="absolute end-3 inset-y-0 flex items-center ps-3.5 pointer-events-none text-red text-sm">{props.errorMessage}</div>}
       </div>
     </>
   )
