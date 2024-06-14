@@ -71,10 +71,10 @@ const Nav = () => {
       </Link>
       <div>
         <div className="hidden sm:flex">
-          <ButtonS text="Logout" icon="" handleClick={()=> logout({ logoutParams: { returnTo: 'http://localhost:5173/' } })}/>
+          <ButtonS text="Logout" icon="" handleClick={()=> logout({ logoutParams: { returnTo: 'https://link-sharing-app-ebon.vercel.app/' } })}/>
         </div>
         <div className="sm:hidden">
-          <ButtonS text="" icon={<CiLogout />} handleClick={()=> logout({ logoutParams: { returnTo: 'http://localhost:5173/' } })}/>
+          <ButtonS text="" icon={<CiLogout />} handleClick={()=> logout({ logoutParams: { returnTo: 'https://link-sharing-app-ebon.vercel.app/' } })}/>
         </div>
       </div>
       </div>
