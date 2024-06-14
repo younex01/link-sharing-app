@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_LINKS, GET_PROFILE } from "./graphql/queries";
 import { useAuth0 } from "@auth0/auth0-react";
+import PageLoader from "./page-loader";
 
 const platforms = [
   {
@@ -31,11 +32,11 @@ const platforms = [
 const Preview = () => {
   const { user, isLoading } = useAuth0();
   if(isLoading)
-    return <div>loading</div>;
+    return <PageLoader />;
   const { data: dataProfile, loading: isProfileLoading, } = useQuery(GET_PROFILE, {
     variables: { user_id: user?.sub }
   });
-  if (isProfileLoading) return <div>Loading links...</div>;
+  if (isProfileLoading) return <PageLoader />;
   let id:number | undefined = dataProfile?.profile[0]?.id;
   const { loading, error, data } = useQuery(GET_LINKS, {
     variables: {id}
@@ -57,7 +58,7 @@ const Preview = () => {
 	};
 
   if(loading)
-    return <div>loading</div>;
+    return <PageLoader />;
   if(error)
     return <div>error</div>;
 

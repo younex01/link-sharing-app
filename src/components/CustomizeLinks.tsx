@@ -23,6 +23,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Save from "./icons/Save";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth0 } from "@auth0/auth0-react";
+import PageLoader from "../page-loader";
 
 let arrayIds: number[] = [];
 
@@ -30,7 +31,7 @@ let arrayIds: number[] = [];
 const CustomizeLinks = memo(({ data, setData}: any) => {
   const { user, isLoading } = useAuth0();
   if(isLoading)
-    return <div>loading</div>;
+    return <PageLoader />;
   const { data: dataProfile } = useQuery(
     GET_PROFILE,
     {

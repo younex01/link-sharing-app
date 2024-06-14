@@ -3,8 +3,8 @@ function PhoneCase() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="308"
-      height="632"
+      width="231"
+      height="474"
       fill="none"
       viewBox="0 0 308 632"
     >

@@ -60,6 +60,7 @@ const Nav = () => {
           />
         </Link>
       </div>
+      <div className="flex">
       <Link to="/preview">
         <div className="hidden sm:flex">
           <ButtonS text="Preview" icon="" handleClick={()=>{}}/>
@@ -70,11 +71,12 @@ const Nav = () => {
       </Link>
       <div>
         <div className="hidden sm:flex">
-          <ButtonS text="Logout" icon="" handleClick={()=> logout({ logoutParams: { returnTo: 'https://link-sharing-app-ebon.vercel.app/' } })}/>
+          <ButtonS text="Logout" icon="" handleClick={()=> logout({ logoutParams: { returnTo: 'http://localhost:5173/' } })}/>
         </div>
         <div className="sm:hidden">
-          <ButtonS text="" icon={<CiLogout />} handleClick={()=> logout({ logoutParams: { returnTo: 'https://link-sharing-app-ebon.vercel.app/' } })}/>
+          <ButtonS text="" icon={<CiLogout />} handleClick={()=> logout({ logoutParams: { returnTo: 'http://localhost:5173/' } })}/>
         </div>
+      </div>
       </div>
     </div>
     </div>

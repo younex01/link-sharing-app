@@ -5,11 +5,12 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_LINKS, GET_PROFILE } from "./graphql/queries";
 import { useAuth0 } from "@auth0/auth0-react";
+import PageLoader from "./page-loader";
 
 const Profile = () => {
   const { user, isLoading } = useAuth0();
   if(isLoading)
-    return <div>loading</div>;
+    return <PageLoader />;
   const { data: dataProfile } = useQuery(
     GET_PROFILE,
     {
@@ -25,7 +26,7 @@ const Profile = () => {
   const [copyData] = useState({ ...data });
 
   if(loading)
-    return <div>loading</div>;
+    return <PageLoader />;
   if(error)
     return <div>error</div>;
 

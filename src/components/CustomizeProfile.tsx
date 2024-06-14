@@ -11,6 +11,7 @@ import ButtonP from "./ButtonP";
 import Save from "./icons/Save";
 import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import PageLoader from "../page-loader";
 
 interface ProfileType {
   first_name: string;
@@ -20,7 +21,7 @@ interface ProfileType {
 
 const CustomizeProfile = () => {
   const { user, isLoading } = useAuth0();
-  if (isLoading) return <div>loading</div>;
+  if (isLoading) return <PageLoader />;
   const { data, error, loading } = useQuery(GET_PROFILE, {
     variables: { user_id: user?.sub },
   });
@@ -74,7 +75,7 @@ const CustomizeProfile = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <PageLoader />;
   if (error) return <p>Error: {error.message}</p>;
 
   return (

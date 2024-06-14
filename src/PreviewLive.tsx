@@ -5,6 +5,7 @@ import { FaYoutube } from "react-icons/fa6";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { IoLogoLinkedin } from "react-icons/io";
 import ArrowRight from "./components/icons/ArrowRight";
+import PageLoader from "./page-loader";
 
 const platforms = [
   {
@@ -31,7 +32,7 @@ const PreviewLive = () => {
       id: id,
     },
   });
-  if (loading) return <div>loading...</div>;
+  if (loading) return <PageLoader />;
   if (error) return <div>ERROR!!!</div>;
   if (!data.profile_by_pk) return <div>NO DATA FOUND!!</div>;
 

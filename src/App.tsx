@@ -5,12 +5,13 @@ import Phone from "./components/Phone"
 import { GET_LINKS, GET_PROFILE } from "./graphql/queries";
 import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import PageLoader from "./page-loader";
 
 
 function App() {
   const { user, isLoading } = useAuth0();
   if(isLoading)
-    return <div>loading</div>;
+    return <PageLoader />;
   const { data: dataProfile } = useQuery(
     GET_PROFILE,
     {
@@ -26,13 +27,13 @@ function App() {
   const [copyData,setCopyData] = useState({...data});
 
   if(loading)
-    return <div>loading..</div>;
+    return <PageLoader />;
   if(error)
     return <div>error</div>;
   
   return (
     <>
-    <div className="bg-[#FAFAFA]   ">
+    { data && ( <div className="bg-[#FAFAFA]   ">
         <div className=" h-screen  flex flex-col items-center sm:gap-5 sm:mx-[24px] sm:py-[24px] ">
           <div className="w-full ">
             <Nav />
@@ -42,7 +43,8 @@ function App() {
             <CustomizeLinks data={data} setData={setCopyData}  />
           </div>
         </div>
-      </div>
+      </div>)
+    }
     </>
   )
 }
