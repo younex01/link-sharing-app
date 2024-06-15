@@ -33,10 +33,10 @@ const Nav = () => {
   }, []);
 
   return (
-    <div className="bg-white  rounded-xl w-full p-5 h-fit ">
+    <div className="bg-white  rounded-xl w-full p-5 h-fit">
       <div className="h-[42px] sm:h-[46px] flex justify-between items-center text-center my-auto">
 
-      <div className="h-[42px] sm:h-[46px] flex  item-center pt-1">
+      <div className="h-[42px] sm:h-[46px] flex justify-center  items-center ">
         <div className="hidden sm:flex">
           <Logo />
         </div>
@@ -44,7 +44,7 @@ const Nav = () => {
           <LogoOnly />
         </div>
       </div>
-      <div className="flex h-[46px]">
+      <div className="flex h-full">
         <Link to="/">
           <Tab
             activated={clickedLink}
@@ -74,7 +74,7 @@ const Nav = () => {
           <ButtonS text="Logout" icon="" handleClick={()=> logout({ logoutParams: { returnTo: 'https://link-sharing-app-ebon.vercel.app/' } })}/>
         </div>
         <div className="sm:hidden">
-          <ButtonS text="" icon={<CiLogout />} handleClick={()=> logout({ logoutParams: { returnTo: 'https://link-sharing-app-ebon.vercel.app/' } })}/>
+          <ButtonS text="" icon={<CiLogout className="text-xl"/>} handleClick={()=> logout({ logoutParams: { returnTo: 'https://link-sharing-app-ebon.vercel.app/' } })}/>
         </div>
       </div>
       </div>

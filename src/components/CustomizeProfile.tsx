@@ -84,7 +84,7 @@ const CustomizeProfile = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col justify-between h-full rounded-xl"
       >
-        <div className=" overflow-y-auto bg-white  -translate-x-1">
+        <div className=" overflow-y-auto bg-white  -translate-x-1 sm:mb-[83px]">
           <div className="font-bold text-[24px] sm:text-[32px] mb-5 ">
             Profile Details
           </div>
@@ -171,7 +171,7 @@ const CustomizeProfile = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px]  inset-x-0 bottom-0  sm:flex">
+        <div className="bg-white sm:h-[78px] w-full  p-[16px] justify-end border-t-2 border-[#D9D9D9] mt-[24px] sm:absolute  inset-x-0 bottom-0  sm:flex">
           <div className="sm:w-[96px]">
             <ButtonP
               text="Save"
