@@ -45,7 +45,7 @@ const Nav = () => {
         </div>
       </div>
       <div className="flex h-full">
-        <Link to="/">
+        <Link to="/home">
           <Tab
             activated={clickedLink}
             text="Links"

@@ -1,52 +1,29 @@
-import { useQuery } from "@apollo/client";
-import CustomizeLinks from "./components/CustomizeLinks"
-import Nav from "./components/Nav"
-import Phone from "./components/Phone"
-import { GET_LINKS, GET_PROFILE } from "./graphql/queries";
-import { useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import PageLoader from "./page-loader";
+import { Link } from "react-router-dom";
+import ButtonP from "./components/ButtonP";
+import HomeIcon from "./components/HomeIcon";
 
-
-function App() {
-  const { user, isLoading } = useAuth0();
-  if(isLoading)
-    return <PageLoader />;
-  const { data: dataProfile } = useQuery(
-    GET_PROFILE,
-    {
-      variables: { user_id: user?.sub },
-    }
-  );
-
-  const id = dataProfile?.profile[0].id;
-  const { loading, error, data } = useQuery(GET_LINKS, {
-    variables: { id },
-    skip: !dataProfile?.profile[0]?.id || !id, 
-  });
-  const [copyData,setCopyData] = useState({...data});
-
-  if(loading)
-    return <PageLoader />;
-  if(error)
-    return <div>error</div>;
-  
+const App = () => {
   return (
-    <>
-    { data && ( <div className="bg-[#FAFAFA]   ">
-        <div className=" h-screen  flex flex-col items-center sm:gap-5 sm:mx-[24px] sm:py-[24px] ">
-          <div className="w-full ">
-            <Nav />
-          </div>
-          <div className="bg-[#FAFAFA] w-full h-full flex flex-row gap-5 p-[16px] sm:p-0 sm:mx-[24px]">
-            <Phone data={copyData}  dataProfile={dataProfile} />
-            <CustomizeLinks data={data} setData={setCopyData}  />
-          </div>
+    <div className="w-screen h-screen flex flex-row sm:justify-center items-center bg-[#FAFAFA] gap-[24px] p-[24px]">
+      <div className="w-[500px] h-[500px] hidden sm:flex">
+        <HomeIcon />
+      </div>
+      <div className="font-bold text-4xl text-black flex flex-col justify-around h-full sm:h-[500px] ">
+        <div>
+        <div>EVERYTHING YOU ARE.</div>
+        <div className="text-blue text-6xl">IN ONE, SIMPLE LINK</div>
+        <div>IN BIO.</div>
         </div>
-      </div>)
-    }
-    </>
-  )
-}
+        <div className="flex items-center justify-center">
+        <div className="sm:w-[180px] w-full">
+        <Link to="/home">
+        <ButtonP text="GET STARTED" handleClick={()=>{}} disable={false}/>
+        </Link>
+        </div>
+      </div>
+      </div>
+    </div>
+  );
+};
 
-export default App
+export default App;

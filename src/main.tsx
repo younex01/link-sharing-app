@@ -12,7 +12,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { AuthenticationGuard } from './authentication-guard.tsx';
 import PreviewLive from './PreviewLive.tsx';
-import Home from './Home.tsx';
+import Home from './App.tsx';
 
 
 const client = new ApolloClient({
@@ -30,24 +30,29 @@ const clientId = import.meta.env.VITE_REACT_APP_AUTH0_CLIENT_ID;
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/home",
     element: <Home />,
     errorElement: <ErrorPage />,
   },
-  // {
-  //   path: "/preview",
-  //   element: <AuthenticationGuard component={Preview} />,
-  //   errorElement: <ErrorPage />,
-  // },
-  // {
-  //   path: "/profile",
-  //   element: <AuthenticationGuard component={Profile} />,
-  //   errorElement: <ErrorPage />,
-  // },
-  // {
-  //   path: "/preview/:id",
-  //   element: <PreviewLive />,
-  //   errorElement: <ErrorPage />,
-  // },
+  {
+    path: "/preview",
+    element: <AuthenticationGuard component={Preview} />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/profile",
+    element: <AuthenticationGuard component={Profile} />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/preview/:id",
+    element: <PreviewLive />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 
 
@@ -58,7 +63,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     domain={domain}
     clientId={clientId}
     authorizationParams={{
-      redirect_uri: 'http://localhost:5173/'
+      redirect_uri: 'https://link-sharing-app-ebon.vercel.app/'
     }}
   >
     
