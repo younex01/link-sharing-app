@@ -27,9 +27,7 @@ const App = () => {
         </div>
         <div className="flex items-center justify-center">
         <div className="sm:w-[180px] w-full">
-        <Link to="/home">
         <ButtonP text="GET STARTED" handleClick={handleLogin} disable={false}/>
-        </Link>
         </div>
       </div>
       </div>
