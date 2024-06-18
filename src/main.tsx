@@ -12,7 +12,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { AuthenticationGuard } from './authentication-guard.tsx';
 import PreviewLive from './PreviewLive.tsx';
-import Home from './App.tsx';
+import Home from './Home.tsx';
 
 
 const client = new ApolloClient({
