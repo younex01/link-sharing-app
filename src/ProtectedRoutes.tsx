@@ -7,7 +7,7 @@ const ProtectedRoutes = () => {
     const handleLogin = async () => {
       await loginWithRedirect({
         appState: {
-          returnTo: "/",
+          returnTo: "/home",
         },
       });
     };
