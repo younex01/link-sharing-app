@@ -21,10 +21,11 @@ const App = () => {
       </div>
       <div className="font-bold text-4xl text-black flex flex-col justify-around h-full sm:h-[500px] ">
         <div>
-        <div>EVERYTHING YOU ARE.</div>
-        <div className="text-blue text-6xl">IN ONE, SIMPLE LINK</div>
-        <div>IN BIO.</div>
+        <div className="text-3xl sm:text-4xl">EVERYTHING YOU ARE.</div>
+        <div className="text-blue text-4xl sm:text-6xl">IN ONE, SIMPLE LINK</div>
+        <div className="text-3xl sm:text-4xl">IN BIO.</div>
         </div>
+        <div className="sm:hidden"><HomeIcon /></div>
         <div className="flex items-center justify-center">
         <div className="sm:w-[180px] w-full">
         <Link to="/home">
