@@ -68,7 +68,7 @@ const Preview = () => {
       <div className="sm:h-[357px] w-full sm:bg-blue rounded-b-3xl sm:p-5">
         <div className="sm:h-[78px] w-full bg-white rounded-xl flex justify-between items-center px-[24px] py-[16px]">
           <div className="w-[159.5px] sm:w-[163px] h-[46px] ">
-            <Link to="/">
+            <Link to="/home">
               <ButtonS text="Back to Editor" icon="" handleClick={()=>{}}/>
             </Link>
           </div>
