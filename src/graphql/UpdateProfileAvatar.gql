@@ -1,0 +1,12 @@
+ mutation UpdateProfileAvatar($id: Int!, $avatar: String!) {
+    update_profile(
+      where: { id: { _eq: $id } }
+      _set: { avatar: $avatar }
+    ) {
+      affected_rows
+      returning {
+        id
+        avatar
+      }
+    }
+  }

@@ -13,39 +13,32 @@ import {
   useFieldArray,
   Controller,
 } from "react-hook-form";
-import { GET_LINKS, GET_PROFILE } from "../graphql/queries";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  DELETE_LINK,
-  INSERT_ONE_LINK,
-} from "../graphql/mutations";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Save from "./icons/Save";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth0 } from "@auth0/auth0-react";
 import PageLoader from "../page-loader";
+import { Get_LinksDocument, useDeleteLinkMutation, useGetProfileByUserIdQuery, useInsertOneLinkMutation } from "../graphql/generated/schema";
 
 let arrayIds: number[] = [];
 
 
 const CustomizeLinks = memo(({ data, setData}: any) => {
   const { user, isLoading } = useAuth0();
-  if(isLoading)
+  if(isLoading || !user || !user.sub)
     return <PageLoader />;
-  const { data: dataProfile } = useQuery(
-    GET_PROFILE,
+  const { data: dataProfile } = useGetProfileByUserIdQuery(
     {
       variables: { user_id: user?.sub },
     }
   );
-  const id = dataProfile?.profile[0].id;
 
   const [isSaved, setIsSaved] = useState(false);
-  const [deleteLink] = useMutation(DELETE_LINK, {
-    refetchQueries: [{ query: GET_LINKS, variables: { id: id } }],
+  const [deleteLink] = useDeleteLinkMutation({
+    refetchQueries: [Get_LinksDocument],
   });
-  const [insertOneLink] = useMutation(INSERT_ONE_LINK, {
-    refetchQueries: [{ query: GET_LINKS , variables: { id: id }}],
+  const [insertOneLink] = useInsertOneLinkMutation({
+    refetchQueries: [Get_LinksDocument],
     errorPolicy: "all",
   });
 
@@ -107,7 +100,7 @@ const CustomizeLinks = memo(({ data, setData}: any) => {
           variables: {
             platform_name: Data.links[i].platform_name,
             link: Data.links[i].link,
-            profile_id: dataProfile.profile[0].id,
+            profile_id: dataProfile!.profile[0].id,
           },
         });
       }

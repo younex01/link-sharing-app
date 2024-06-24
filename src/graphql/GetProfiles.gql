@@ -1,0 +1,9 @@
+query get_profiles {
+  profile {
+    id
+    last_name
+    first_name
+    email
+    avatar
+  }
+}

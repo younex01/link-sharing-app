@@ -1,0 +1,5 @@
+mutation DeleteLink($id: Int!) {
+    delete_links_by_pk(id_: $id) {
+      id_
+    }
+  }

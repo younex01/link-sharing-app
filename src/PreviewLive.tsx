@@ -1,11 +1,10 @@
 import { useParams } from "react-router-dom";
-import { GET_PROFILE_BY_ID } from "./graphql/queries";
-import { useQuery } from "@apollo/client";
 import { FaYoutube } from "react-icons/fa6";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { IoLogoLinkedin } from "react-icons/io";
 import ArrowRight from "./components/icons/ArrowRight";
 import PageLoader from "./page-loader";
+import { useGetProfileQuery } from "./graphql/generated/schema";
 
 const platforms = [
   {
@@ -27,12 +26,13 @@ const platforms = [
 
 const PreviewLive = () => {
   let { id } = useParams();
-  const { data, loading, error } = useQuery(GET_PROFILE_BY_ID, {
+  if(!id) return <PageLoader />;
+  const { data, loading, error } = useGetProfileQuery({
     variables: {
-      id: id,
+      id: parseInt(id),
     },
   });
-  if (loading) return <PageLoader />;
+  if (loading || !data) return <PageLoader />;
   if (error) return <div>ERROR!!!</div>;
   if (!data.profile_by_pk) return <div>NO DATA FOUND!!</div>;
 
@@ -66,7 +66,7 @@ const PreviewLive = () => {
                 ),
               }).map((_, idx) => {
                 const item =
-                  data && data.profile_by_pk.links
+                  data && data.profile_by_pk && data.profile_by_pk.links
                     ? data.profile_by_pk.links[idx]
                     : null;
                     return (

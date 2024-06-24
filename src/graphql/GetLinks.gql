@@ -1,0 +1,7 @@
+query get_links($id: Int!) {
+  links(where: {profile_id: {_eq: $id}}) {
+    platform_name
+    link
+    id_
+  }
+}

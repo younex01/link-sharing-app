@@ -1,0 +1,14 @@
+query GetProfile($id: Int!) {
+  profile_by_pk(id: $id) {
+    id
+    avatar
+    email
+    first_name
+    last_name
+    links {
+      link
+      platform_name
+      id_
+    }
+  }
+}

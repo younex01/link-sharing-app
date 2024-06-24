@@ -1,9 +1,8 @@
 import { GET_PROFILES } from "../graphql/queries";
-import { UPDATE_PROFILE_AVATAR } from "../graphql/mutations";
-import { useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { FaPlus, FaRegImage } from "react-icons/fa6";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useUpdateProfileAvatarMutation } from "../graphql/generated/schema";
 
 interface ImageType {
   value: string;
@@ -16,7 +15,7 @@ const ImageUpload = ({ value, id }: ImageType) => {
   const [selectedImage, setSelectedImage] = useState<
     string | ArrayBuffer | null
   >();
-  const [updateAvatar] = useMutation(UPDATE_PROFILE_AVATAR, {
+  const [updateAvatar] = useUpdateProfileAvatarMutation({
     refetchQueries: [
       { query: GET_PROFILES, variables: { user_id: user?.sub } },
     ],
@@ -31,13 +30,12 @@ const ImageUpload = ({ value, id }: ImageType) => {
     if (file) {
       const reader = new FileReader();
       reader.onload = async (e) => {
-        if (e.target) setSelectedImage(e.target.result);
-
+        if(!e.target?.result) return;
         try {
            await updateAvatar({
             variables: {
               id: id,
-              avatar: e.target?.result,
+              avatar: String(e.target?.result),
             },
           });
         } catch (err) {

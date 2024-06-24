@@ -1,0 +1,10 @@
+mutation AddLinks($profile_id: Int!, $platform_name: String! ,$link: String!) {
+    insert_links_one(object: {profile_id: $profile_id, platform_name: $platform_name , link: $link}) {
+      
+        id_
+        profile_id
+        platform_name
+        link
+      
+    }
+  }

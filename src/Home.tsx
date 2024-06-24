@@ -1,30 +1,31 @@
-import { useQuery } from "@apollo/client";
 import CustomizeLinks from "./components/CustomizeLinks"
 import Nav from "./components/Nav"
 import Phone from "./components/Phone"
-import { GET_LINKS, GET_PROFILE } from "./graphql/queries";
 import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import PageLoader from "./page-loader";
+import { useGetProfileByUserIdQuery, useGet_LinksQuery } from "./graphql/generated/schema";
 
 
 function Home() {
   const { user, isLoading } = useAuth0();
-  if(isLoading)
+  if(isLoading || !user || !user.sub)
     return <PageLoader />;
-  const { data: dataProfile } = useQuery(
-    GET_PROFILE,
+  const { data: dataProfile,loading: load} = useGetProfileByUserIdQuery(
     {
       variables: { user_id: user?.sub },
     }
   );
-
-  const id = dataProfile?.profile[0].id;
-  const { loading, error, data } = useQuery(GET_LINKS, {
-    variables: { id },
+  const id:number | undefined = dataProfile?.profile[0]?.id;
+  const { loading, error, data } = useGet_LinksQuery({
+    variables: { id:id||0 },
     skip: !dataProfile?.profile[0]?.id || !id, 
   });
   const [copyData,setCopyData] = useState({...data});
+  if(load)
+    return <PageLoader />;
+  if(!dataProfile)
+    return <PageLoader />;
 
   if(loading)
     return <PageLoader />;

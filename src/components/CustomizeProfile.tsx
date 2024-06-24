@@ -3,15 +3,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ImageUpload from "./ImageUpload";
-import { useQuery, useMutation } from "@apollo/client";
-import { GET_PROFILE } from "../graphql/queries";
-import { ADD_PROFILE } from "../graphql/mutations";
-import { UPDATE_PROFILE } from "../graphql/mutations";
 import ButtonP from "./ButtonP";
 import Save from "./icons/Save";
 import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import PageLoader from "../page-loader";
+import { GetProfileByUserIdDocument, useAddProfileMutation, useGetProfileByUserIdQuery, useUpdateProfileMutation } from "../graphql/generated/schema";
 
 interface ProfileType {
   first_name: string;
@@ -21,15 +18,16 @@ interface ProfileType {
 
 const CustomizeProfile = () => {
   const { user, isLoading } = useAuth0();
-  if (isLoading) return <PageLoader />;
-  const { data, error, loading } = useQuery(GET_PROFILE, {
+  if (isLoading || !user || !user.sub) return <PageLoader />;
+  const { data, error, loading } = useGetProfileByUserIdQuery({
     variables: { user_id: user?.sub },
   });
-  const [addProfile] = useMutation(ADD_PROFILE, {
-    refetchQueries: [{ query: GET_PROFILE, variables: { user_id: user?.sub } }],
+  if (loading) return <PageLoader />;
+  const [addProfile] = useAddProfileMutation({
+    refetchQueries: [GetProfileByUserIdDocument],
   });
-  const [updateProfile] = useMutation(UPDATE_PROFILE, {
-    refetchQueries: [{ query: GET_PROFILE, variables: { user_id: user?.sub } }],
+  const [updateProfile] = useUpdateProfileMutation({
+    refetchQueries: [GetProfileByUserIdDocument],
   });
   const [isSaved, setIsSaved] = useState(false);
   const mySchema = z.object({
@@ -48,14 +46,14 @@ const CustomizeProfile = () => {
 
   const onSubmit: SubmitHandler<ProfileType> = async (Data) => {
     try {
-      if (data.profile.length !== 0 && data.profile[0].id) {
+      if (data!.profile.length !== 0 && data!.profile[0].id) {
         await updateProfile({
           variables: {
-            id: data.profile[0].id,
+            id: data!.profile[0].id,
             first_name: Data.first_name,
             last_name: Data.last_name,
             email: Data.email,
-            avatar: data.profile[0].avatar,
+            avatar: data!.profile[0].avatar,
           },
         });
       } else {
@@ -64,7 +62,7 @@ const CustomizeProfile = () => {
             first_name: Data.first_name,
             last_name: Data.last_name,
             email: Data.email,
-            avatar: data.profile[0].avatar,
+            avatar: data!.profile[0].avatar,
           },
         });
       }
@@ -96,14 +94,14 @@ const CustomizeProfile = () => {
             <div className="text-[16px]  text-[#737373]">Profile picture</div>
             <ImageUpload
               value={
-                data !== undefined && data.profile.length !== 0
+                data !== undefined && data.profile.length !== 0 && data.profile[0].avatar
                   ? data.profile[0].avatar
                   : ""
               }
               id={
-                data !== undefined && data.profile.length !== 0
+                data !== undefined && data.profile.length !== 0 && data.profile[0].id
                   ? data.profile[0].id
-                  : null
+                  : 0
               }
             />
             <div className="text-[12px] text-[#737373] sm:w-[220px]">
@@ -157,7 +155,7 @@ const CustomizeProfile = () => {
                 <Input
                   type="email"
                   value={
-                    data !== undefined && data.profile.length !== 0
+                    data !== undefined && data.profile.length !== 0 && data.profile[0].email
                       ? data.profile[0].email
                       : ""
                   }

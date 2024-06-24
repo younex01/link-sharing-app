@@ -6,10 +6,9 @@ import { PiGithubLogoFill } from "react-icons/pi";
 import ArrowRight from "./components/icons/ArrowRight";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import { GET_LINKS, GET_PROFILE } from "./graphql/queries";
 import { useAuth0 } from "@auth0/auth0-react";
 import PageLoader from "./page-loader";
+import { useGetProfileByUserIdQuery, useGet_LinksQuery } from "./graphql/generated/schema";
 
 const platforms = [
   {
@@ -31,14 +30,14 @@ const platforms = [
 
 const Preview = () => {
   const { user, isLoading } = useAuth0();
-  if(isLoading)
+  if(isLoading || !user || !user.sub)
     return <PageLoader />;
-  const { data: dataProfile, loading: isProfileLoading, } = useQuery(GET_PROFILE, {
+  const { data: dataProfile, loading: isProfileLoading, } = useGetProfileByUserIdQuery({
     variables: { user_id: user?.sub }
   });
-  if (isProfileLoading) return <PageLoader />;
-  let id:number | undefined = dataProfile?.profile[0]?.id;
-  const { loading, error, data } = useQuery(GET_LINKS, {
+  if (isProfileLoading || !dataProfile) return <PageLoader />;
+  let id:number  = dataProfile?.profile[0]?.id;
+  const { loading, error, data } = useGet_LinksQuery({
     variables: {id}
   });
   const [isCopied, setIsCopied] = useState(false);
@@ -92,7 +91,7 @@ const Preview = () => {
           <div className="relative flex justify-center flex-col items-center w-full h-full   pt-[48px] px-[56px]">
             <div className="w-[237px]  flex justify-center flex-col items-center">
               <div className="h-[104px] w-[104px] rounded-full bg-blue border-4 border-blue">
-                {dataProfile.profile ? (
+                {dataProfile.profile[0].avatar ? (
                   <img
                     src={dataProfile.profile[0].avatar}
                     alt={`${dataProfile.profile[0].first_name} ${dataProfile.profile[0].last_name}`}
